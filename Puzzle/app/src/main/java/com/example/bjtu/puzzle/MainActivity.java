@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private int Difficulty=3;
+    private static int Difficulty=3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +22,9 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("Picture",R.drawable.bjtu);
         startActivity(intent);
     }
-
+    public static int getDifficulty(){
+        return Difficulty;
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu,menu);

@@ -17,8 +17,7 @@ public class Puzzle extends AppCompatActivity {
         int picture =0,n=2;
         picture=intent.getIntExtra("Picture",picture);
         n=intent.getIntExtra("Difficulty",n);
-        ImageView imageView=(ImageView) findViewById(R.id.pictureView);
-        imageView.setImageResource(picture);
+
         Log.e(TAG, "onCreate: "+n );
 
     }
