@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/id_easy"
+        android:title="3X3" />
+    <item
+        android:id="@+id/id_medium"
+        android:title="4*4" />
+    <item
+        android:id="@+id/id_hard"
+        android:title="5*5" />
+</menu>

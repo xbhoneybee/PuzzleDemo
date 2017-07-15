@@ -3,11 +3,14 @@ package com.example.bjtu.puzzle;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private int Difficulty;
+    private int Difficulty=3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,4 +22,30 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("Picture",R.drawable.bjtu);
         startActivity(intent);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.id_easy:
+                Difficulty=3;
+                //Toast.makeText(this,"You clicked"+Difficulty,Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.id_medium:
+                Difficulty=4;
+                //Toast.makeText(this,"You clicked"+Difficulty,Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.id_hard:
+                Difficulty=5;
+                //Toast.makeText(this,"You clicked"+Difficulty,Toast.LENGTH_SHORT).show();
+            break;
+            default:
+            break;
+        }
+        return true;
+    }
+
 }
