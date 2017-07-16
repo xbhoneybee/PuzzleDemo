@@ -1,3 +1,8 @@
 # PuzzleDemo
 An Android Puzzle APP Demo
-change test1
+<<<<<<< HEAD
+change test1 +1
+=======
+
+change by DL in12µã57·Ö
+>>>>>>> origin/master
