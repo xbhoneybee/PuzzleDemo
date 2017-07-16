@@ -17,12 +17,22 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private List<Img>  Imglist=new ArrayList<>();
     private static int Difficulty=3;
+    private static int chosenImage=R.drawable.image1;
+    private RecyclerView recyclerView;
+    public static int getChosenImage() {
+        return chosenImage;
+    }
+
+    public static void setChosenImage(int chosenImage) {
+        MainActivity.chosenImage = chosenImage;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initImage();
-        RecyclerView recyclerView=(RecyclerView)findViewById(R.id.recycler_view);
+        recyclerView=(RecyclerView)findViewById(R.id.recycler_view);
 //        LinearLayoutManager layoutManager=new LinearLayoutManager(this);
 //        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         StaggeredGridLayoutManager layoutManager=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
@@ -33,9 +43,10 @@ public class MainActivity extends AppCompatActivity {
     public void gotoPuzzle(View view) {
         Intent intent=new Intent(MainActivity.this,Puzzle.class);
         intent.putExtra("Difficulty",Difficulty);
-        intent.putExtra("Picture",R.drawable.image1);
+        intent.putExtra("Picture",chosenImage);
         startActivity(intent);
     }
+
     public static int getDifficulty(){
         return Difficulty;
     }
@@ -44,23 +55,25 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu,menu);
         return true;
     }
+
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.id_easy:
                 Difficulty=3;
-                //Toast.makeText(this,"You clicked"+Difficulty,Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"You choose difficulty:"+Difficulty,Toast.LENGTH_SHORT).show();
                 break;
             case R.id.id_medium:
                 Difficulty=4;
-                //Toast.makeText(this,"You clicked"+Difficulty,Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"You clicked"+Difficulty,Toast.LENGTH_SHORT).show();
                 break;
             case R.id.id_hard:
                 Difficulty=5;
-                //Toast.makeText(this,"You clicked"+Difficulty,Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"You clicked"+Difficulty,Toast.LENGTH_SHORT).show();
             break;
             default:
             break;
         }
+        gotoPuzzle(recyclerView);//由此进入第二界面
         return true;
     }
     //初始化图片

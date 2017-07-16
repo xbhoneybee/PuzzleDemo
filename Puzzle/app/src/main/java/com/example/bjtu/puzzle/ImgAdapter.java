@@ -1,10 +1,12 @@
 package com.example.bjtu.puzzle;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -16,9 +18,11 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
     private List<Img> Imglist;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
+        View aview;
         ImageView ImgImage;
         public ViewHolder(View itemView) {
             super(itemView);
+            aview=itemView;
             ImgImage=(ImageView) itemView.findViewById(R.id.recycler_item_img);
 
         }
@@ -31,7 +35,19 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
     @Override
     public ImgAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item,parent,false);
-        ViewHolder holder=new ViewHolder(view);
+        final ViewHolder holder=new ViewHolder(view);
+        holder.ImgImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int posdtion=holder.getAdapterPosition();
+                Img img=Imglist.get(posdtion);
+                Toast.makeText(view.getContext(),"you clicked image"+String.valueOf(img.getImg()), Toast.LENGTH_SHORT).show();
+                MainActivity.setChosenImage(img.getImg());
+            }
+        });
+
+
+
         return holder;
     }
 
@@ -45,4 +61,6 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
     public int getItemCount() {
         return Imglist.size();
     }
+
+
 }
