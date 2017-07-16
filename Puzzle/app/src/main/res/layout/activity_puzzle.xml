@@ -7,11 +7,5 @@
     tools:context="com.example.bjtu.puzzle.Puzzle">
 
 
-    <GridView
-        android:id="@+id/picture"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_centerInParent="true">
-       <!-- 在父布局居中显示-->
-        ></GridView>
+
 </android.support.constraint.ConstraintLayout>

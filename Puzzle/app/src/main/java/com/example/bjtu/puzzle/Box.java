@@ -10,6 +10,7 @@ public class Box {
     private int posId;
     private int bitmapId;
     private Bitmap bitmap;
+
     public int getPosId(){
         return posId;
     }
@@ -19,6 +20,7 @@ public class Box {
     public Bitmap getBitmap(){
         return bitmap;
     }
+
     public void setPosId(int posId){
         this.posId=posId;
     }
