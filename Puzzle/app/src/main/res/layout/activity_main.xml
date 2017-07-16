@@ -19,6 +19,14 @@
     <!--这个的布局推荐RecyclerView 利用GridLayoutManager实现
     目前先用GridView 尝试制作
     -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
 
+        >
+
+
+    </android.support.v7.widget.RecyclerView>
 
 </android.support.constraint.ConstraintLayout>
