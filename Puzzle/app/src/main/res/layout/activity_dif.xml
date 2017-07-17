@@ -31,7 +31,7 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_weight="1"
-            android:text="简单: 4  X  4"
+            android:text="简单:  4  X  4"
             android:textSize="25dp"/>
         <Button
             android:id="@+id/dif_button_3"
@@ -41,7 +41,7 @@
             android:layout_marginRight="25dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:text="练手: 5  X  5"
+            android:text="练手:  5  X  5"
             android:textSize="25dp"
             />
 
