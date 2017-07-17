@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
@@ -29,6 +31,8 @@ import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private Button leftbut;
+    private Button rightbut;
     private List<Img>  Imglist=new ArrayList<>();
     private static int Difficulty=3;
     private static final int RESULT_CAMERA=100;
@@ -50,6 +54,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initImage();
+        ActionBar actionBar=getSupportActionBar();
+        if(actionBar!=null){
+            actionBar.hide();
+        }
+        leftbut=(Button)findViewById(R.id.head_button_left);
+        rightbut=(Button)findViewById(R.id.head_button_right);
+        leftbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder dialog=new AlertDialog.Builder(MainActivity.this);
+                dialog.setTitle("关  于");
+                dialog.setMessage("XXX工作室\ncopyright @2017|all right reserved.");
+                dialog.setCancelable(true);
+                dialog.show();
+            }
+        });
+
+        rightbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //此处可以处理自选图片
+
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         recyclerView=(RecyclerView)findViewById(R.id.recycler_view);
 //        LinearLayoutManager layoutManager=new LinearLayoutManager(this);
 //        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -59,27 +92,26 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.main_menu,menu);
+//        return true;
+//    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu,menu);
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
-            case R.id.id_help:
-                AlertDialog.Builder dialog=new AlertDialog.Builder(MainActivity.this);
-                dialog.setTitle("关  于");
-                dialog.setMessage("XXX工作室\ncopyright @2017|all right reserved.");
-                dialog.setCancelable(true);
-                dialog.show();
-                break;
-            default:
-                break;
-        }
-        return true;
-    }
+//    public boolean onOptionsItemSelected(MenuItem item){
+//        switch (item.getItemId()){
+//            case R.id.id_help:
+//                AlertDialog.Builder dialog=new AlertDialog.Builder(MainActivity.this);
+//                dialog.setTitle("关  于");
+//                dialog.setMessage("XXX工作室\ncopyright @2017|all right reserved.");
+//                dialog.setCancelable(true);
+//                dialog.show();
+//                break;
+//            default:
+//                break;
+//        }
+//        return true;
+//    }
     //添加几个方法
     private void showDialogItem(){
         /*

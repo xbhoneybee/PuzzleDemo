@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#178"
+    >
+
+        <Button
+            android:id="@+id/head_button_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text="关  于"
+            android:background="#178"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            />
+        <TextView
+            android:id="@+id/head_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Puzzle"
+            android:hint="@string/app_name"
+            android:textColor="#fff"
+            android:textSize="24sp"
+            />
+        <Button
+                android:id="@+id/head_button_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:text="加  图"
+            android:background="#178"
+            android:textSize="18sp"
+        android:textColor="#fff"
+        />
+
+</LinearLayout>
