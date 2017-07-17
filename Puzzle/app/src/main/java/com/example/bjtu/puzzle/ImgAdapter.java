@@ -1,6 +1,10 @@
 package com.example.bjtu.puzzle;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -40,6 +46,8 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
             public void onClick(View view) {
                 int posdtion=holder.getAdapterPosition();
                 Img img=Imglist.get(posdtion);
+                if(posdtion==0) {
+                }
                 //处理
                 Toast.makeText(view.getContext(),"you clicked image"+String.valueOf(img.getImg()), Toast.LENGTH_SHORT).show();
                 MainActivity.setChosenImage(img.getImg());

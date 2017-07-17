@@ -18,6 +18,10 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private List<Img>  Imglist=new ArrayList<>();
     private static int Difficulty=3;
+    private static final int RESULT_CAMERA=100;
+    private static final int RESULT_GALLERY=200;
+    public static  String TEMP_IMAGE_PATH;
+    public static  final String IMAGE_TYPE="image/*";
     private static int chosenImage=R.drawable.image1;
     private RecyclerView recyclerView;
     public static int getChosenImage() {
