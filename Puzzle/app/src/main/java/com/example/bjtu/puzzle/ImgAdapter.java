@@ -46,8 +46,8 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
             public void onClick(View view) {
                 int posdtion=holder.getAdapterPosition();
                 Img img=Imglist.get(posdtion);
-                if(posdtion==0) {
-                }
+//                if(posdtion==0) {
+//                }
                 //处理
                 Toast.makeText(view.getContext(),"you clicked image"+String.valueOf(img.getImg()), Toast.LENGTH_SHORT).show();
                 MainActivity.setChosenImage(img.getImg());
@@ -55,6 +55,38 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
                 Intent intent=new Intent(view.getContext(),Main2Activity.class);
                 intent.putExtra("Picture",img.getImg());
                 view.getContext().startActivity(intent);
+            }
+        });
+        holder.ImgImage.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View view) {
+//                int posdtion=holder.getAdapterPosition();
+//                Img img=Imglist.get(posdtion);
+//                MainActivity.Imglist.remove(img);
+//                notifyItemRemoved(posdtion);
+                AlertDialog.Builder dialog=new AlertDialog.Builder(view.getContext());
+                dialog.setTitle("确定删除此图？");
+                dialog.setCancelable(false);
+
+                dialog.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                dialog.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        int posdtion=holder.getAdapterPosition();
+                        Img img=Imglist.get(posdtion);
+                        MainActivity.Imglist.remove(img);
+                        notifyItemRemoved(posdtion);
+                        notifyItemRangeChanged(posdtion,MainActivity.Imglist.size()-posdtion);
+                    }
+                });
+                dialog.show();
+                return true;
             }
         });
         return holder;

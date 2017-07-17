@@ -33,7 +33,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private Button leftbut;
     private Button rightbut;
-    private List<Img>  Imglist=new ArrayList<>();
+    public static List<Img>  Imglist=new ArrayList<>();
     private static int Difficulty=3;
     private static final int RESULT_CAMERA=100;
     private static final int RESULT_GALLERY=200;
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
     }
     //初始化图片
     public void initImage(){
-        for(int i=0;i<5;i++){
+        for(int i=0;i<1;i++){
             Img img1=new Img(R.drawable.image1);
             Imglist.add(img1);
             Img img2=new Img(R.drawable.image2);
