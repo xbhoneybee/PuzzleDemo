@@ -1,6 +1,7 @@
 package com.example.bjtu.puzzle;
 
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,16 +41,8 @@ public class MainActivity extends AppCompatActivity {
         ImgAdapter adapter=new ImgAdapter(Imglist);
         recyclerView.setAdapter(adapter);
     }
-    public void gotoPuzzle(View view) {
-        Intent intent=new Intent(MainActivity.this,Puzzle.class);
-        intent.putExtra("Difficulty",Difficulty);
-        intent.putExtra("Picture",chosenImage);
-        startActivity(intent);
-    }
 
-    public static int getDifficulty(){
-        return Difficulty;
-    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu,menu);
@@ -58,27 +51,21 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case R.id.id_easy:
-                Difficulty=3;
-                Toast.makeText(this,"You choose difficulty:"+Difficulty,Toast.LENGTH_SHORT).show();
+            case R.id.id_help:
+                AlertDialog.Builder dialog=new AlertDialog.Builder(MainActivity.this);
+                dialog.setTitle("关  于");
+                dialog.setMessage("XXX工作室\ncopyright @2017|all right reserved.");
+                dialog.setCancelable(true);
+                dialog.show();
                 break;
-            case R.id.id_medium:
-                Difficulty=4;
-                Toast.makeText(this,"You clicked"+Difficulty,Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.id_hard:
-                Difficulty=5;
-                Toast.makeText(this,"You clicked"+Difficulty,Toast.LENGTH_SHORT).show();
-            break;
             default:
-            break;
+                break;
         }
-        gotoPuzzle(recyclerView);//由此进入第二界面
         return true;
     }
     //初始化图片
     public void initImage(){
-        for(int i=0;i<1;i++){
+        for(int i=0;i<5;i++){
             Img img1=new Img(R.drawable.image1);
             Imglist.add(img1);
             Img img2=new Img(R.drawable.image2);

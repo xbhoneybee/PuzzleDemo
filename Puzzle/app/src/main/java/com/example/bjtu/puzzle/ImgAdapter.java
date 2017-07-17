@@ -1,5 +1,6 @@
 package com.example.bjtu.puzzle;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,10 +25,8 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
             super(itemView);
             aview=itemView;
             ImgImage=(ImageView) itemView.findViewById(R.id.recycler_item_img);
-
         }
     }
-
     public ImgAdapter(List<Img> imglist){
         Imglist=imglist;
     }
@@ -41,26 +40,24 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
             public void onClick(View view) {
                 int posdtion=holder.getAdapterPosition();
                 Img img=Imglist.get(posdtion);
+                //处理
                 Toast.makeText(view.getContext(),"you clicked image"+String.valueOf(img.getImg()), Toast.LENGTH_SHORT).show();
                 MainActivity.setChosenImage(img.getImg());
+                //进入第二页面
+                Intent intent=new Intent(view.getContext(),Main2Activity.class);
+                intent.putExtra("Picture",img.getImg());
+                view.getContext().startActivity(intent);
             }
         });
-
-
-
         return holder;
     }
-
     @Override
     public void onBindViewHolder(ImgAdapter.ViewHolder holder, int position) {
         Img img=Imglist.get(position);
         holder.ImgImage.setImageResource(img.getImg());
     }
-
     @Override
     public int getItemCount() {
         return Imglist.size();
     }
-
-
 }

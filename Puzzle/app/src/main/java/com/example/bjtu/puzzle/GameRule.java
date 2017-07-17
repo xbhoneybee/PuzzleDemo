@@ -13,7 +13,7 @@ import java.util.List;
 public class GameRule {
     public static List<Box> boxes=new ArrayList<Box>();
     public static Box last;
-    private int n=MainActivity.getDifficulty();
+    private int n=Main2Activity.getDifficulty();
     /**
      *需要再点击后进行判断是否能移动？
      * 移动后是否正解
@@ -52,16 +52,16 @@ public class GameRule {
         }
     }
     public void isChange(Box from,Box last){
-        if((from.getPosId()-1)/MainActivity.getDifficulty()==
-                (last.getPosId()-1)/MainActivity.getDifficulty()){
+        if((from.getPosId()-1)/Main2Activity.getDifficulty()==
+                (last.getPosId()-1)/Main2Activity.getDifficulty()){
             //row
             if(Math.abs(from.getPosId()-last.getPosId())==1){
                 swapBox(from,last);
             }
-        }else if((from.getPosId()-1)%MainActivity.getDifficulty()==
-                (last.getPosId()-1)%MainActivity.getDifficulty()){
+        }else if((from.getPosId()-1)%Main2Activity.getDifficulty()==
+                (last.getPosId()-1)%Main2Activity.getDifficulty()){
             //col
-            if(Math.abs(from.getPosId()-last.getPosId())==MainActivity.getDifficulty()){
+            if(Math.abs(from.getPosId()-last.getPosId())==Main2Activity.getDifficulty()){
                 swapBox(from,last);
             }
         }
