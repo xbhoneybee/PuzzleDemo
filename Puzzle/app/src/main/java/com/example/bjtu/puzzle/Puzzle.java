@@ -29,7 +29,7 @@ public class Puzzle extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puzzle);
         Intent intent=getIntent();
-        int picture =0;
+        int picture =R.drawable.image1;
         picture=intent.getIntExtra("Picture",picture);
         n=intent.getIntExtra("Difficulty",2);
         Log.e(TAG, "onCreate: "+n );

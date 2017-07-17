@@ -74,7 +74,6 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
 
                     }
                 });
-
                 dialog.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

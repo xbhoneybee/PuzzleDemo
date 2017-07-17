@@ -52,16 +52,16 @@ public class GameRule {
         }
     }
     public void isChange(Box from,Box last){
-        if((from.getPosId()-1)/Main2Activity.getDifficulty()==
-                (last.getPosId()-1)/Main2Activity.getDifficulty()){
+        if((from.getPosId()-1)/n==
+                (last.getPosId()-1)/n){
             //row
             if(Math.abs(from.getPosId()-last.getPosId())==1){
                 swapBox(from,last);
             }
-        }else if((from.getPosId()-1)%Main2Activity.getDifficulty()==
-                (last.getPosId()-1)%Main2Activity.getDifficulty()){
+        }else if((from.getPosId()-1)%n==
+                (last.getPosId()-1)%n){
             //col
-            if(Math.abs(from.getPosId()-last.getPosId())==Main2Activity.getDifficulty()){
+            if(Math.abs(from.getPosId()-last.getPosId())==n){
                 swapBox(from,last);
             }
         }
