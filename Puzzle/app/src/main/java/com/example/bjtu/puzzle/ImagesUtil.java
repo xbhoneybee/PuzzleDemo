@@ -14,8 +14,8 @@ import java.util.List;
  */
 
 public class ImagesUtil {
-    public Box box;
-    public void createInitBitmaps(int n, Bitmap picSelected,Context context){
+    public static Box box;
+    public static void createInitBitmaps(int n, Bitmap picSelected,Context context){
         /**
          *传入难度 n 选择的图片 和上下文
          */
@@ -39,7 +39,7 @@ public class ImagesUtil {
                 GameRule.boxes.add(box);
             }
     }
-    public Bitmap resizeBitmap(float newWidth,float newHeight,Bitmap bitmap){
+    public static Bitmap resizeBitmap(float newWidth,float newHeight,Bitmap bitmap){
         Matrix matrix=new Matrix();
         matrix.postScale(newWidth/bitmap.getWidth(),newHeight/bitmap.getHeight());
         Bitmap newBitmap =Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
