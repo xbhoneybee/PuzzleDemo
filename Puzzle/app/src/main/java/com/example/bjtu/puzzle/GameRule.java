@@ -23,7 +23,7 @@ public class GameRule {
     private static final String TAG = "GameRule";
     public void BoxGenerator(){
         last=boxes.get(boxes.size()-1);
-        double times=Math.random()*100+0;
+        double times=Math.random()*100+40;
         int time=(int)times;
         int lastId;
         int fromId;

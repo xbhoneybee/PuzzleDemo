@@ -224,10 +224,6 @@ public class MainActivity extends AppCompatActivity {
         for(int i=0;i<1;i++){
             Img img1=new Img(R.drawable.image1);
             Imglist.add(img1);
-            Img img2=new Img(R.drawable.image2);
-            Imglist.add(img2);
-            Img img3=new Img(R.drawable.image3);
-            Imglist.add(img3);
             Img img4=new Img(R.drawable.image4);
             Imglist.add(img4);
             Img img5=new Img(R.drawable.image5);
