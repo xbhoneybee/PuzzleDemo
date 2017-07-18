@@ -10,9 +10,12 @@
         android:id="@+id/dif_imageView"
         android:layout_width="match_parent"
         android:layout_margin="25dp"
+
+
         android:layout_height="348dp"
         android:layout_gravity="top|center_horizontal"
-        android:src="@drawable/image1" />
+        android:src="@drawable/image4" />
+
 
     <Button
         android:id="@+id/dif_button_1"

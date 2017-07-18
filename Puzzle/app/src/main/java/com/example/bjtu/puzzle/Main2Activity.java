@@ -28,7 +28,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_dif);
 
         Intent intent=getIntent();
-        imgid=intent.getIntExtra("Picture",R.drawable.image1);
+        imgid=intent.getIntExtra("Picture",R.drawable.image4);
         img=(ImageView)findViewById(R.id.dif_imageView);
         img.setImageResource(imgid);
 
