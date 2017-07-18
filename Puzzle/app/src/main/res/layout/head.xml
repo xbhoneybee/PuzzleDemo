@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
      android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#00000000"
+    android:background="#3f51b5"
     >
 
         <Button
@@ -10,12 +10,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:text="关  于"
-            android:background="#00000000"
-            android:textColor="#fff"
-            android:textSize="18sp"
-            />
+            android:layout_marginLeft="5dp"
+            android:background="#0000"
+            android:text="PUZZLE"
+            android:textSize="25sp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse" />
         <TextView
             android:id="@+id/head_text"
             android:layout_width="0dp"
@@ -23,21 +22,21 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Puzzle"
-            android:hint="@string/app_name"
+            android:hint="  "
             android:textColor="#fff"
             android:textSize="24sp"
             />
+
         <Button
-                android:id="@+id/head_button_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:text="加  图"
+            android:id="@+id/head_button_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="0dp"
             android:background="#00000000"
-            android:textSize="18sp"
-        android:textColor="#fff"
-        />
+
+            android:text="   +"
+            android:textSize="35sp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse" />
 
 </LinearLayout>
