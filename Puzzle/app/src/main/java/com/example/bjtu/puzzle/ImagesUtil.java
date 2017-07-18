@@ -14,8 +14,12 @@ import java.util.List;
  */
 
 public class ImagesUtil {
-    public static Box box;
-    public static void createInitBitmaps(int n, Bitmap picSelected,Context context){
+    public  Box box;
+    private  GameRule ruler;
+    public ImagesUtil(GameRule ri){
+        ruler=ri;
+    }
+    public  void createInitBitmaps(int n, Bitmap picSelected,Context context){
         /**
          *传入难度 n 选择的图片 和上下文
          */
@@ -30,13 +34,13 @@ public class ImagesUtil {
                 bitmapItems.add(bitmap);
                 if(i==n&&j==n){
                     bitmap=Bitmap.createBitmap(resizeBitmap(itemWidth,itemHeight,picSelected));
-                    GameRule.last=new Box(n*n,n*n,bitmap);
+                    ruler.last=new Box(n*n,n*n,bitmap);
                     /**
                      * 这个还需要将picSeleced缩小到n倍,当做起始操作点
                      */
                 }
                 box=new Box((i-1)*n+j,(i-1)*n+j,bitmap);
-                GameRule.boxes.add(box);
+                ruler.boxes.add(box);
             }
     }
     public static Bitmap resizeBitmap(float newWidth,float newHeight,Bitmap bitmap){

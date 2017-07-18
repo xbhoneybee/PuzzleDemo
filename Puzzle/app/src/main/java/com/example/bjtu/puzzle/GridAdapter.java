@@ -17,11 +17,9 @@ public class GridAdapter extends BaseAdapter {
 
     private List<Box> picList;
     private Context context;
-    private  float SQ;
     public GridAdapter(Context context, List<Box> picList) {
         this.context = context;
         this.picList = picList;
-        SQ=Puzzle.Length/Puzzle.n;
     }
     @Override
     public int getCount() {

@@ -1,9 +1,11 @@
 package com.example.bjtu.puzzle;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -24,6 +26,7 @@ public class Puzzle extends AppCompatActivity  {
     public static   int n;
     private  GameRule ruler;
     private GridView gridView;
+    private ImagesUtil imagesUtil;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,18 +38,28 @@ public class Puzzle extends AppCompatActivity  {
         Log.e(TAG, "onCreate: "+n );
         Drawable tmpdrawable= ContextCompat.getDrawable(this,picture);
         picPuzzle=MainActivity.DrawableToBitmap(tmpdrawable);
+        ruler=new GameRule();
         initView();
     }
 
     private void initView(){
-        Log.e(TAG,"原heigt   "+picPuzzle.getHeight());
-        Log.e(TAG,"原width   "+picPuzzle.getWidth());
+        Log.e(TAG,"原图heigt   "+picPuzzle.getHeight());
+        Log.e(TAG,"原图width   "+picPuzzle.getWidth());
         DisplayMetrics myDisplayMetrics=ScreenUtil.getScreenSize(this);
-        Length=myDisplayMetrics.xdpi;
-        ImagesUtil.resizeBitmap(Length,Length,picPuzzle);
+        Length=myDisplayMetrics.widthPixels;
+        picPuzzle=ImagesUtil.resizeBitmap(Length,Length,picPuzzle);
         Log.e(TAG,"length   "+Length);
-        ImagesUtil.createInitBitmaps(n,picPuzzle,this);
-        //ruler.BoxGenerator();//Runtime Error
+        Log.e(TAG,"Screen xdpi   "+myDisplayMetrics.xdpi);
+        Log.e(TAG,"Screen  ydpi  "+myDisplayMetrics.ydpi);
+        Log.e(TAG,"Screen width   "+myDisplayMetrics.widthPixels);
+        Log.e(TAG,"Screen height   "+(int)myDisplayMetrics.heightPixels);
+        Log.e(TAG,"Pic width   "+picPuzzle.getWidth());
+        imagesUtil=new ImagesUtil(ruler);
+        imagesUtil.createInitBitmaps(n,picPuzzle,this);
+        Log.e(TAG,"boxes   1 w"+ruler.boxes.get(0).getBitmap().getWidth());
+        Log.e(TAG,"boxes   1 h"+ruler.boxes.get(0).getBitmap().getHeight());
+
+
         ImageView image=(ImageView)findViewById(R.id.image);
         image.setImageBitmap(picPuzzle);
         /*try {
@@ -60,13 +73,27 @@ public class Puzzle extends AppCompatActivity  {
         gridView.setNumColumns(n);
         gridView.setColumnWidth((int)Length/n);
         gridView.setHorizontalSpacing(0);
-        gridView.setVerticalSpacing(0);
-        GridAdapter myadapter=new GridAdapter(this,GameRule.boxes);
+        gridView.setVerticalSpacing(5);
+        ruler.BoxGenerator();
+        final GridAdapter myadapter=new GridAdapter(this,ruler.boxes);
         gridView.setAdapter(myadapter);
-       gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(Puzzle.this,"position "+position,Toast.LENGTH_SHORT).show();
+                Box from=ruler.boxes.get(position);
+                if(ruler.isChange(from,ruler.last))
+                {
+                    //刷新界面，并判断完成否
+                    myadapter.notifyDataSetChanged();//提示数据变化，刷新
+                    if(ruler.isCompleted())
+                    {
+                        /*
+                         *当拼图实现后
+                         */
+                        Log.e(TAG, "onItemClick: wcccccccccc" );
+                        finish();
+                    }
+                }
             }
         });
     }
