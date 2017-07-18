@@ -69,5 +69,6 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         intent.putExtra("Difficulty",Difficulty);
         intent.putExtra("Picture",imgid);
         startActivity(intent);
+
     }
 }

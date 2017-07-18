@@ -28,7 +28,9 @@ public class GameRule {
         int lastId;
         int fromId;
         Log.e(TAG, "BoxGenerator: "+time );
+
         for(int i=0;i<time;i++){
+//            for(int i=0;i<2;i++){
             double ddxy=Math.random()*4;
 
             int dxy=((int)ddxy);

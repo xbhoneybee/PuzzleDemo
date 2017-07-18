@@ -34,6 +34,7 @@ public class ImagesUtil {
                 bitmapItems.add(bitmap);
                 if(i==n&&j==n){
                     bitmap=Bitmap.createBitmap(resizeBitmap(itemWidth,itemHeight,picSelected));
+
                     ruler.last=new Box(n*n,n*n,bitmap);
                     /**
                      * 这个还需要将picSeleced缩小到n倍,当做起始操作点

@@ -27,12 +27,16 @@ import static android.view.View.GONE;
 
 public class Puzzle extends AppCompatActivity implements View.OnClickListener {
 
-    private int seconds=0,steps=0;
+    private int seconds=-1,steps=0;
     private TextView textsec,textsteps;
     private Button butgiveup,butrestart;
     int picture=R.drawable.image4;
     private Timer timer;
     private TimerTask timerTask;//计时器线程
+    private ImageView sucImg;
+    private View LinearView;
+    private TextView suctext1;
+
 
     private static final String TAG = "Puzzle";
     private Bitmap picPuzzle;
@@ -42,6 +46,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
     private GridView gridView;
     private ImagesUtil imagesUtil;
 
+    //只和计时器有关
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -70,7 +75,9 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
         textsteps=(TextView)findViewById(R.id.puzzle_steps);
         textsec=(TextView)findViewById(R.id.puzzle_time);
 
-
+        LinearView=(View)findViewById(R.id.puzzle_linear);
+        sucImg=(ImageView)findViewById(R.id.puzzle_img);
+        suctext1=(TextView)findViewById(R.id.puzzle_linear_text1);
 
     }
 
@@ -80,9 +87,9 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
         Intent intent=getIntent();
         int picture =R.drawable.image4;
         picture=intent.getIntExtra("Picture",picture);
-        n=intent.getIntExtra("Difficulty",2);
+        n=intent.getIntExtra("Difficulty",3);
         //Log.e(TAG, "onCreate: "+n );
-
+        sucImg.setImageResource(picture);
         Drawable tmpdrawable= ContextCompat.getDrawable(this,picture);
         picPuzzle=MainActivity.DrawableToBitmap(tmpdrawable);
         ruler=new GameRule();
@@ -91,13 +98,18 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
     }
 
 
+
     private void initView(){
         Log.e(TAG,"原图heigt   "+picPuzzle.getHeight());
         Log.e(TAG,"原图width   "+picPuzzle.getWidth());
         DisplayMetrics myDisplayMetrics=ScreenUtil.getScreenSize(this);
-        Length=myDisplayMetrics.widthPixels;
+        Length= myDisplayMetrics.widthPixels-myDisplayMetrics.densityDpi/160*(50+3*(n-1));
         picPuzzle=ImagesUtil.resizeBitmap(Length,Length,picPuzzle);
+
         Log.e(TAG,"length   "+Length);
+        Log.e(TAG,"改后图heigt   "+picPuzzle.getHeight());
+        Log.e(TAG,"改后图width   "+picPuzzle.getWidth());
+
         Log.e(TAG,"Screen xdpi   "+myDisplayMetrics.xdpi);
         Log.e(TAG,"Screen  ydpi  "+myDisplayMetrics.ydpi);
         Log.e(TAG,"Screen width   "+myDisplayMetrics.widthPixels);
@@ -112,8 +124,10 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
         gridView.setVisibility(View.VISIBLE);
         gridView.setNumColumns(n);
         gridView.setColumnWidth((int)Length/n);
-        gridView.setHorizontalSpacing(3);
-        gridView.setVerticalSpacing(3);
+
+//        gridView.setHorizontalSpacing(3);
+//        gridView.setVerticalSpacing(3);
+
         ruler.BoxGenerator();
         final GridAdapter myadapter=new GridAdapter(this,ruler.boxes);
         gridView.setAdapter(myadapter);
@@ -123,6 +137,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
                 Box from=ruler.boxes.get(position);
                 if(ruler.isChange(from,ruler.last))
                 {
+                    gridView.setBackgroundColor((int)((steps%2)*0xffFCFCFC));
                     steps++;
                     textsteps.setText(String.valueOf(steps));
                     //刷新界面，并判断完成否
@@ -132,13 +147,25 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
                         /*
                          *当拼图实现后
                          */
-                        Log.e(TAG, "onItemClick: wcccccccccc" );
-                        finish();
+                        timer.cancel();
+                        timerTask.cancel();
+                        suctext1.setText("您用了：  "+String.valueOf(steps)+"步   "+String.valueOf(seconds)+" 秒   完成\n\n"+"我们对您的评价是：\n\n"+(seconds<30?"666666666666666666666666":"您弱的一P,请接受开发人员的嘲讽"));
+                        LinearView.setVisibility(View.VISIBLE);
+//                        sucImg.setVisibility(View.VISIBLE);
+                        Runnable runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        };
+                        handler.postDelayed(runnable, 2000);
                     }
                 }
             }
         });
 
+        seconds=-1;
+        steps=0;
         timer = new Timer(true);
         timerTask = new TimerTask() {
             @Override
@@ -149,7 +176,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
             }
         };
         timer.schedule(timerTask, 0, 1000);
-        textsec.setText("0s");
+        textsec.setText("0 s");
     }
 
     @Override
@@ -161,6 +188,10 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
                 break;
             case R.id.puzzle_but_2:
                 //restart
+                steps=0;
+                textsteps.setText(String.valueOf(steps));
+                timer.cancel();
+                timerTask.cancel();
                 onStart();
                 break;
         }
