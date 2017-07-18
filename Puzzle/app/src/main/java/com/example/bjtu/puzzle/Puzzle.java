@@ -5,7 +5,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+<<<<<<< HEAD
 import android.net.Uri;
+=======
+import android.os.Handler;
+import android.os.Message;
+>>>>>>> origin/master
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -14,16 +19,27 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 import static android.view.View.GONE;
 
-public class Puzzle extends AppCompatActivity  {
+public class Puzzle extends AppCompatActivity implements View.OnClickListener {
+
+    private int seconds=0,steps=0;
+    private TextView textsec,textsteps;
+    private Button butgiveup,butrestart;
+    int picture=R.drawable.image4;
+    private Timer timer;
+    private TimerTask timerTask;//计时器线程
 
     private static final String TAG = "Puzzle";
     private Bitmap picPuzzle;
@@ -32,10 +48,42 @@ public class Puzzle extends AppCompatActivity  {
     private  GameRule ruler;
     private GridView gridView;
     private ImagesUtil imagesUtil;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    // 更新计时器
+                    seconds++;
+                    textsec.setText(String.valueOf(seconds)+" s");
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puzzle);
+
+        butgiveup=(Button)findViewById(R.id.puzzle_but_1);
+        butgiveup.setOnClickListener(this);
+        butrestart=(Button)findViewById(R.id.puzzle_but_2);
+        butrestart.setOnClickListener(this);
+        textsteps=(TextView)findViewById(R.id.puzzle_steps);
+        textsec=(TextView)findViewById(R.id.puzzle_time);
+
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         Intent intent=getIntent();
         int picture =R.drawable.image4;
         picture=intent.getIntExtra("Picture",picture);
@@ -47,9 +95,12 @@ public class Puzzle extends AppCompatActivity  {
         }else{
             picPuzzle=BitmapFactory.decodeFile(path);
         }
+
         ruler=new GameRule();
+
         initView();
     }
+
 
     private void initView(){
         Log.e(TAG,"原图heigt   "+picPuzzle.getHeight());
@@ -83,6 +134,8 @@ public class Puzzle extends AppCompatActivity  {
                 Box from=ruler.boxes.get(position);
                 if(ruler.isChange(from,ruler.last))
                 {
+                    steps++;
+                    textsteps.setText(String.valueOf(steps));
                     //刷新界面，并判断完成否
                     myadapter.notifyDataSetChanged();//提示数据变化，刷新
                     if(ruler.isCompleted())
@@ -96,6 +149,31 @@ public class Puzzle extends AppCompatActivity  {
                 }
             }
         });
+
+        timer = new Timer(true);
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Message msg = new Message();
+                msg.what = 1;
+                handler.sendMessage(msg);
+            }
+        };
+        timer.schedule(timerTask, 0, 1000);
+        textsec.setText("0s");
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.puzzle_but_1:
+                //giveup
+                finish();
+                break;
+            case R.id.puzzle_but_2:
+                //restart
+                onStart();
+                break;
+        }
+    }
 }
