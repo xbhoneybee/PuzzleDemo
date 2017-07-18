@@ -3,7 +3,9 @@ package com.example.bjtu.puzzle;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,9 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 
 import static android.view.View.GONE;
 
@@ -35,9 +40,13 @@ public class Puzzle extends AppCompatActivity  {
         int picture =R.drawable.image4;
         picture=intent.getIntExtra("Picture",picture);
         n=intent.getIntExtra("Difficulty",2);
-        //Log.e(TAG, "onCreate: "+n );
-        Drawable tmpdrawable= ContextCompat.getDrawable(this,picture);
-        picPuzzle=MainActivity.DrawableToBitmap(tmpdrawable);
+            String path=intent.getStringExtra("Picturepath");
+        if(path==null) {
+            Drawable tmpdrawable = ContextCompat.getDrawable(this, picture);
+            picPuzzle = MainActivity.DrawableToBitmap(tmpdrawable);
+        }else{
+            picPuzzle=BitmapFactory.decodeFile(path);
+        }
         ruler=new GameRule();
         initView();
     }

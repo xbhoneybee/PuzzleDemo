@@ -27,13 +27,13 @@ public class GameRule {
         int time=(int)times;
         int lastId;
         int fromId;
-        Log.e(TAG, "BoxGenerator: "+time );
+        //Log.e(TAG, "BoxGenerator: "+time );
         for(int i=0;i<time;i++){
             double ddxy=Math.random()*4;
 
             int dxy=((int)ddxy);
-            Log.e(TAG, "BoxGenerator:dxy  "+dxy );
-            Log.e(TAG, "BoxGenerator: ddxy  "+ddxy );
+            //Log.e(TAG, "BoxGenerator:dxy  "+dxy );
+            //Log.e(TAG, "BoxGenerator: ddxy  "+ddxy );
             switch (dxy){
                 case 0://左边
                     lastId=last.getPosId()-1;
