@@ -1,22 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/puzzleback"
+    android:orientation="vertical"
     tools:context="com.example.bjtu.puzzle.Puzzle">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="10dp">
+        <TextView
+            android:id="@+id/puzzle_text_steps"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="步 数:"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:textSize="20sp"
+            android:background="#0000"
+            />
+        <TextView
+            android:id="@+id/puzzle_steps"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="000"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:textSize="20sp"
+            android:background="#0000"
+            android:layout_marginRight="5dp"/>
+        <TextView
+            android:id="@+id/puzzle_text_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="时 间:"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:textSize="20sp"
+            android:background="#0000"
 
+            />
+        <TextView
+            android:id="@+id/puzzle_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="00:00"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:textSize="20sp"
+            android:background="#0000" />
+
+    </LinearLayout>
 
     <GridView
         android:id="@+id/gridView"
         android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_margin="25dp"
-        android:layout_height="match_parent"
-         />
-    <ImageView
-        android:id="@+id/image"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</android.support.constraint.ConstraintLayout>
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:horizontalSpacing="5dp"
+        android:verticalSpacing="5dp"
+        android:layout_height="wrap_content"
+         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp">
+        <Button
+            android:id="@+id/puzzle_but_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="放  弃"
+            android:textSize="20sp"
+            android:layout_marginRight="10dp"/>
+        <Button
+            android:id="@+id/puzzle_but_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="重  来"
+            android:textSize="20sp"
+            android:layout_marginLeft="10dp"/>
+    </LinearLayout>
+</LinearLayout>

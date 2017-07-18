@@ -3,30 +3,29 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main2back"
-    android:weightSum="7">
+    android:background="@drawable/backmain"
+>
 
     <ImageView
         android:id="@+id/dif_imageView"
         android:layout_width="match_parent"
         android:layout_margin="25dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="7"
+        android:layout_height="348dp"
+        android:layout_gravity="top|center_horizontal"
         android:src="@drawable/image1" />
 
-        <Button
-            android:id="@+id/dif_button_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/dif_button_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_weight="1"
+        android:background="#00000000"
+        android:text="菜鸟:  3  X  3"
+        android:textSize="25sp" />
 
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_weight="1"
-            android:background="#00000000"
-            android:text="菜鸟:  3  X  3"
-            android:textSize="25dp"/>
-        <Button
+    <Button
             android:id="@+id/dif_button_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,7 +34,7 @@
             android:layout_weight="1"
             android:background="#00000000"
             android:text="简单:  4  X  4"
-            android:textSize="25dp"/>
+            android:textSize="25sp"/>
         <Button
             android:id="@+id/dif_button_3"
             android:layout_width="match_parent"

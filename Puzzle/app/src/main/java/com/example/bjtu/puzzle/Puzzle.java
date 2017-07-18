@@ -60,14 +60,14 @@ public class Puzzle extends AppCompatActivity  {
         Log.e(TAG,"boxes   1 h"+ruler.boxes.get(0).getBitmap().getHeight());
 
 
-        ImageView image=(ImageView)findViewById(R.id.image);
-        image.setImageBitmap(picPuzzle);
+//        ImageView image=(ImageView)findViewById(R.id.image);
+//        image.setImageBitmap(picPuzzle);
         /*try {
             Thread.sleep(30000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }*/
-        image.setVisibility(GONE);
+//        image.setVisibility(GONE);
         gridView=(GridView)findViewById(R.id.gridView);
         gridView.setVisibility(View.VISIBLE);
         gridView.setNumColumns(n);
@@ -97,6 +97,5 @@ public class Puzzle extends AppCompatActivity  {
             }
         });
     }
-
 
 }
