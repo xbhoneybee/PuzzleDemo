@@ -30,7 +30,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
     private int seconds=0,steps=0;
     private TextView textsec,textsteps;
     private Button butgiveup,butrestart;
-    int picture=R.drawable.image1;
+    int picture=R.drawable.image4;
     private Timer timer;
     private TimerTask timerTask;//计时器线程
 
@@ -70,11 +70,6 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
         textsteps=(TextView)findViewById(R.id.puzzle_steps);
         textsec=(TextView)findViewById(R.id.puzzle_time);
 
-        Intent intent=getIntent();
-<<<<<<< HEAD
-        picture=intent.getIntExtra("Picture",picture);
-        n=intent.getIntExtra("Difficulty",2);
-        Log.e(TAG, "onCreate: "+n );
 
 
     }
@@ -82,12 +77,12 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
     @Override
     protected void onStart() {
         super.onStart();
-=======
+        Intent intent=getIntent();
         int picture =R.drawable.image4;
         picture=intent.getIntExtra("Picture",picture);
         n=intent.getIntExtra("Difficulty",2);
         //Log.e(TAG, "onCreate: "+n );
->>>>>>> f58aaf5185e4bc685d873b88c665333df1618990
+
         Drawable tmpdrawable= ContextCompat.getDrawable(this,picture);
         picPuzzle=MainActivity.DrawableToBitmap(tmpdrawable);
         ruler=new GameRule();
