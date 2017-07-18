@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_weight="7"
-        android:src="@drawable/image1" />
+        android:src="@drawable/image4" />
 
         <Button
             android:id="@+id/dif_button_1"

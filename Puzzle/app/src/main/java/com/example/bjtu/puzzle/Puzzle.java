@@ -32,10 +32,10 @@ public class Puzzle extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puzzle);
         Intent intent=getIntent();
-        int picture =R.drawable.image1;
+        int picture =R.drawable.image4;
         picture=intent.getIntExtra("Picture",picture);
         n=intent.getIntExtra("Difficulty",2);
-        Log.e(TAG, "onCreate: "+n );
+        //Log.e(TAG, "onCreate: "+n );
         Drawable tmpdrawable= ContextCompat.getDrawable(this,picture);
         picPuzzle=MainActivity.DrawableToBitmap(tmpdrawable);
         ruler=new GameRule();
@@ -59,21 +59,17 @@ public class Puzzle extends AppCompatActivity  {
         Log.e(TAG,"boxes   1 w"+ruler.boxes.get(0).getBitmap().getWidth());
         Log.e(TAG,"boxes   1 h"+ruler.boxes.get(0).getBitmap().getHeight());
 
-
-        ImageView image=(ImageView)findViewById(R.id.image);
-        image.setImageBitmap(picPuzzle);
         /*try {
             Thread.sleep(30000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }*/
-        image.setVisibility(GONE);
         gridView=(GridView)findViewById(R.id.gridView);
         gridView.setVisibility(View.VISIBLE);
         gridView.setNumColumns(n);
         gridView.setColumnWidth((int)Length/n);
-        gridView.setHorizontalSpacing(0);
-        gridView.setVerticalSpacing(5);
+        gridView.setHorizontalSpacing(3);
+        gridView.setVerticalSpacing(3);
         ruler.BoxGenerator();
         final GridAdapter myadapter=new GridAdapter(this,ruler.boxes);
         gridView.setAdapter(myadapter);

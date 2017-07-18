@@ -21,6 +21,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int RESULT_GALLERY=200;
     public static  String TEMP_IMAGE_PATH;
     public static  final String IMAGE_TYPE="image/*";
-    private static int chosenImage=R.drawable.image1;
+    private static int chosenImage=R.drawable.image4;
     private RecyclerView recyclerView;
     public static int getChosenImage() {
         return chosenImage;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initImage();
@@ -222,8 +224,6 @@ public class MainActivity extends AppCompatActivity {
     //初始化图片
     public void initImage(){
         for(int i=0;i<1;i++){
-            Img img1=new Img(R.drawable.image1);
-            Imglist.add(img1);
             Img img4=new Img(R.drawable.image4);
             Imglist.add(img4);
             Img img5=new Img(R.drawable.image5);
