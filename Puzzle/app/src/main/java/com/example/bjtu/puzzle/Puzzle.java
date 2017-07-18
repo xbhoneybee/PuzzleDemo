@@ -3,9 +3,11 @@ package com.example.bjtu.puzzle;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
+
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,8 +22,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 import static android.view.View.GONE;
 
@@ -87,11 +91,18 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
         Intent intent=getIntent();
         int picture =R.drawable.image4;
         picture=intent.getIntExtra("Picture",picture);
-        n=intent.getIntExtra("Difficulty",3);
-        //Log.e(TAG, "onCreate: "+n );
+
         sucImg.setImageResource(picture);
-        Drawable tmpdrawable= ContextCompat.getDrawable(this,picture);
-        picPuzzle=MainActivity.DrawableToBitmap(tmpdrawable);
+        n=intent.getIntExtra("Difficulty",2);
+            String path=intent.getStringExtra("Picturepath");
+        if(path==null) {
+            Drawable tmpdrawable = ContextCompat.getDrawable(this, picture);
+            picPuzzle = MainActivity.DrawableToBitmap(tmpdrawable);
+        }else{
+            picPuzzle=BitmapFactory.decodeFile(path);
+        }
+
+
         ruler=new GameRule();
 
         initView();

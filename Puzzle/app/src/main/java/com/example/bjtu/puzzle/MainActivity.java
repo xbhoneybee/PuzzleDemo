@@ -2,6 +2,7 @@ package com.example.bjtu.puzzle;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,7 +10,10 @@ import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +22,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +36,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity {
     private Button leftbut;
@@ -78,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //此处可以处理自选图片
-
+                showDialogItem();
             }
         });
     }
@@ -116,11 +122,14 @@ public class MainActivity extends AppCompatActivity {
 //        return true;
 //    }
     //添加几个方法
+private static final String TAG = "MainActivity";
     private void showDialogItem(){
         /*
          *选择使用相机还是使用本地图库
          * 使用AlertDialog比较合适
          */
+        TEMP_IMAGE_PATH= Environment.getExternalStorageDirectory().getPath();
+        Log.e(TAG, "showDialogItem: "+TEMP_IMAGE_PATH );
         AlertDialog.Builder dialog= new AlertDialog.Builder(MainActivity.this);
         dialog.setTitle("请选择");
         dialog.setItems(new String[]{"使用相机", "本地图库"}, new DialogInterface.OnClickListener() {
@@ -129,17 +138,22 @@ public class MainActivity extends AppCompatActivity {
                 switch (which){
                     case 0:
                         //camera
-                        Intent intent0 =new Intent("MediaStroe.IMAGE_CAPTURE");
                         long  time = Calendar.getInstance().getTimeInMillis();
-
-                        intent0.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(TEMP_IMAGE_PATH+time+".jpg")));
+                        Intent intent0=new Intent(("android.media.action.IMAGE_CAPTURE"));
+                        TEMP_IMAGE_PATH+=time+".jpg";
+                        intent0.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(new File(TEMP_IMAGE_PATH)));
+                        Log.e(TAG, "onClick: PHOTO name "+ TEMP_IMAGE_PATH);
                         startActivityForResult(intent0,RESULT_CAMERA);
                         break;
                     case 1:
                         //gallery
-                        Intent intent1 =new Intent(Intent.CATEGORY_OPENABLE);
-                        intent1.setType(IMAGE_TYPE);
-                        startActivityForResult(intent1,RESULT_GALLERY);
+                        if(ContextCompat.checkSelfPermission(MainActivity.this,
+                                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                            ActivityCompat.requestPermissions(MainActivity.this,new
+                            String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+                        }else{
+                            openAlbum();
+                        }
                         break;
                     default:
                         break;
@@ -148,26 +162,57 @@ public class MainActivity extends AppCompatActivity {
         });
         dialog.create().show();
     }
-
+    private void openAlbum(){
+        Intent intent1 =new Intent("android.intent.action.GET_CONTENT");
+        intent1.setType(IMAGE_TYPE);
+        startActivityForResult(intent1,RESULT_GALLERY);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1){
+            if (grantResults.length>0&&grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                openAlbum();
+            }else{
+               Toast.makeText(this,"你不允许调用相册",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode){
             case RESULT_CAMERA:
                 if(resultCode==RESULT_OK) {
-                    Intent intent=new Intent(MainActivity.this,Puzzle.class);
+                    Intent intent=new Intent(MainActivity.this,Main2Activity.class);
                     intent.putExtra("Difficulty",this.Difficulty);
-                    intent.putExtra("Picture",TEMP_IMAGE_PATH);
+                    intent.putExtra("Picturepath",TEMP_IMAGE_PATH);
+                    Log.e(TAG, "onActivityResult:Photo  name  "+ TEMP_IMAGE_PATH);
                     startActivity(intent);
                 }
                 break;
             case RESULT_GALLERY:
                 if(resultCode==RESULT_OK) {
-                    Cursor cursor = this.getContentResolver().query(data.getData(), null, null, null, null);
-                    cursor.moveToFirst();
-                    String imagePath = cursor.getString(cursor.getColumnIndex("_data"));
-                    Intent intent=new Intent(MainActivity.this,Puzzle.class);
+                    String imagePath =null;
+                    Uri uri=data.getData();
+                    if(DocumentsContract.isDocumentUri(this,uri)){
+                        //如果是document类型的Uri，则通过document id 处理
+                        String docId=DocumentsContract.getDocumentId(uri);
+                        if("com.android.provider.media.documents".equalsIgnoreCase(uri.getAuthority())){
+                            String id=docId.split(":")[1];
+                            String selection=MediaStore.Images.Media._ID+"="+id;
+                            imagePath=getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,selection);
+                        }else{
+
+                        }
+                    }else if("content".equalsIgnoreCase(uri.getScheme())){
+                        //如果是content类型的Uri，则通过普通方式 处理
+                        imagePath=getImagePath(uri,null);
+                    }else if("file".equalsIgnoreCase(uri.getScheme())){
+                        //如果是file类型的Uri，直接获取路径
+                        imagePath=uri.getPath();
+                    }
+                    Intent intent=new Intent(MainActivity.this,Main2Activity.class);
                     intent.putExtra("Difficulty",this.Difficulty);
-                    intent.putExtra("Picture",imagePath);
+                    intent.putExtra("Picturepath",imagePath);
                     startActivity(intent);
                 }
                 break;
@@ -188,6 +233,17 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return bitmap;
+    }
+    private String getImagePath(Uri uri,String selection){
+        String path=null;
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if(cursor!=null){
+            if(cursor.moveToFirst()){
+                path=cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
     }
     private   Bitmap DrawableIdToBitmap(int id) {
         Drawable drawable= ContextCompat.getDrawable(this,id);

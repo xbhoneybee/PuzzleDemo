@@ -34,8 +34,8 @@ public class GameRule {
             double ddxy=Math.random()*4;
 
             int dxy=((int)ddxy);
-            Log.e(TAG, "BoxGenerator:dxy  "+dxy );
-            Log.e(TAG, "BoxGenerator: ddxy  "+ddxy );
+            //Log.e(TAG, "BoxGenerator:dxy  "+dxy );
+            //Log.e(TAG, "BoxGenerator: ddxy  "+ddxy );
             switch (dxy){
                 case 0://左边
                     lastId=last.getPosId()-1;
