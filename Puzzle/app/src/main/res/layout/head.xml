@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
      android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#178"
+    android:background="#00000000"
     >
 
         <Button
@@ -12,7 +12,7 @@
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:text="关  于"
-            android:background="#178"
+            android:background="#00000000"
             android:textColor="#fff"
             android:textSize="18sp"
             />
@@ -35,7 +35,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:text="加  图"
-            android:background="#178"
+            android:background="#00000000"
             android:textSize="18sp"
         android:textColor="#fff"
         />
