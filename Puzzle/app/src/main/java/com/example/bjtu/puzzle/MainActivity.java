@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     public static  final String IMAGE_TYPE="image/*";
     private static int chosenImage=R.drawable.image4;
     private RecyclerView recyclerView;
+    private File imageFile=null;
     public static int getChosenImage() {
         return chosenImage;
     }
@@ -128,7 +130,7 @@ private static final String TAG = "MainActivity";
          *选择使用相机还是使用本地图库
          * 使用AlertDialog比较合适
          */
-        TEMP_IMAGE_PATH= Environment.getExternalStorageDirectory().getPath();
+        TEMP_IMAGE_PATH= Environment.getExternalStorageDirectory().getPath()+"/DCIM/Camera/";
         Log.e(TAG, "showDialogItem: "+TEMP_IMAGE_PATH );
         AlertDialog.Builder dialog= new AlertDialog.Builder(MainActivity.this);
         dialog.setTitle("请选择");
@@ -140,8 +142,14 @@ private static final String TAG = "MainActivity";
                         //camera
                         long  time = Calendar.getInstance().getTimeInMillis();
                         Intent intent0=new Intent(("android.media.action.IMAGE_CAPTURE"));
+
+                        File out =new File(TEMP_IMAGE_PATH);
+                        if(!out.exists()){
+                            out.mkdirs();
+                        }
+                        out=new File (TEMP_IMAGE_PATH,time+".jpg");
                         TEMP_IMAGE_PATH+=time+".jpg";
-                        intent0.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(new File(TEMP_IMAGE_PATH)));
+                        intent0.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(out));
                         Log.e(TAG, "onClick: PHOTO name "+ TEMP_IMAGE_PATH);
                         startActivityForResult(intent0,RESULT_CAMERA);
                         break;
@@ -178,13 +186,31 @@ private static final String TAG = "MainActivity";
         }
     }
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("filePath", TEMP_IMAGE_PATH);
+        Log.d(TAG, "onSaveInstanceState");
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (TextUtils.isEmpty(TEMP_IMAGE_PATH)) {
+            TEMP_IMAGE_PATH= savedInstanceState.getString("filePath");
+        }
+        Log.d(TAG, "onRestoreInstanceState");
+    }
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode){
             case RESULT_CAMERA:
                 if(resultCode==RESULT_OK) {
+                    imageFile = new File(TEMP_IMAGE_PATH);
+
                     Intent intent=new Intent(MainActivity.this,Main2Activity.class);
                     intent.putExtra("Difficulty",this.Difficulty);
+
                     intent.putExtra("Picturepath",TEMP_IMAGE_PATH);
+
                     Log.e(TAG, "onActivityResult:Photo  name  "+ TEMP_IMAGE_PATH);
                     startActivity(intent);
                 }
