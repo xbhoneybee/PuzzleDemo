@@ -43,7 +43,8 @@ public class GridAdapter extends BaseAdapter {
         ImageView ic_pic_item=null;
         if(convertView==null){
             ic_pic_item=new ImageView(context);
-            ic_pic_item.setLayoutParams(new GridView.LayoutParams(picList.get(0).getBitmap().getWidth(),picList.get(0).getBitmap().getHeight()));
+            ic_pic_item.setLayoutParams(new GridView.LayoutParams(
+                    picList.get(0).getBitmap().getWidth(),picList.get(0).getBitmap().getHeight()));
             //
             ic_pic_item.setScaleType(ImageView.ScaleType.FIT_XY);
             //
