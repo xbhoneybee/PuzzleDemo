@@ -50,6 +50,7 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
                 //进入第二页面
                 Intent intent=new Intent(view.getContext(),Main2Activity.class);
                 intent.putExtra("Picture",img.getImg());
+                intent.putExtra("Picturepath",img.getPath());
                 view.getContext().startActivity(intent);
             }
         });
@@ -70,9 +71,13 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
                     public void onClick(DialogInterface dialogInterface, int i) {
                         int posdtion=holder.getAdapterPosition();
                         Img img=Imglist.get(posdtion);
-                        MainActivity.Imglist.remove(img);
-                        notifyItemRemoved(posdtion);
-                        notifyItemRangeChanged(posdtion,MainActivity.Imglist.size()-posdtion);
+                        if(img.isIsself()){
+                            Toast.makeText(view.getContext(),"你不能删除默认图片",Toast.LENGTH_LONG).show();
+                        }else {
+                            MainActivity.Imglist.remove(img);
+                            notifyItemRemoved(posdtion);
+                            notifyItemRangeChanged(posdtion, MainActivity.Imglist.size() - posdtion);
+                        }
                     }
                 });
                 dialog.show();

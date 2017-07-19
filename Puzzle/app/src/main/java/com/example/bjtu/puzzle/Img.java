@@ -6,16 +6,21 @@ package com.example.bjtu.puzzle;
 
 public class Img {
     private int img;
-
-    public Img(int im){
-        img=im;
+    private boolean isself;
+    private  String path=null;
+    public Img(int im,boolean self){
+        img=im;isself=self;
     }
-
+    public Img(String pa,boolean self){
+        path=pa;isself=self;
+    }
     public int getImg() {
         return img;
     }
-
-    public void setImg(int img) {
-        this.img = img;
+    public  String getPath(){
+        return path;
+    }
+    public boolean isIsself(){
+        return isself;
     }
 }

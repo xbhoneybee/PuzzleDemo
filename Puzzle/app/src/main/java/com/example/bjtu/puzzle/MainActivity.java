@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -26,11 +27,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
     private Button leftbut;
@@ -48,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
     private static int chosenImage=R.drawable.image4;
     private RecyclerView recyclerView;
     private File GalleryimageFile=null;
+    public static File PathFile;
+
+    public MainActivity() throws FileNotFoundException {
+    }
+
     public static void setChosenImage(int chosenImage) {
         MainActivity.chosenImage = chosenImage;
     }
@@ -56,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initImage();
+        PathFile=new File(getApplicationContext().getFilesDir().getAbsolutePath()+"/allSelectedPicPath.txt");
+        Log.e(TAG, "onCreate: PathFile -- "+ getApplicationContext().getFilesDir().getAbsolutePath()+"/allSelectedPicPath.txt");
         ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
             actionBar.hide();
@@ -84,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        initImage();
         recyclerView=(RecyclerView)findViewById(R.id.recycler_view);
         StaggeredGridLayoutManager layoutManager=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -212,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent=new Intent(MainActivity.this,Main2Activity.class);
                         intent.putExtra("Difficulty",this.Difficulty);
                         intent.putExtra("Picturepath",ScreenShotPath);
+                        SetPathFile.writeFileSdcard(PathFile.getPath(),ScreenShotPath);
                         startActivity(intent);
                 }
                 break;
@@ -230,8 +243,16 @@ public class MainActivity extends AppCompatActivity {
         // 设置裁剪
         intent.putExtra("crop", "true");
         // aspectX , aspectY :宽高的比例
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
+        if(android.os.Build.MODEL.contains("HUAWEI"))
+        {//华为特殊处理 不然会显示圆
+            intent.putExtra("aspectX", 9998);
+            intent.putExtra("aspectY", 9999);
+        }
+        else
+        {
+            intent.putExtra("aspectX", 1);
+            intent.putExtra("aspectY", 1);
+        }
         // outputX , outputY : 裁剪图片宽高
         intent.putExtra("outputX", output_X);
         intent.putExtra("outputY", output_Y);
@@ -248,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("return-data", false);// 不返回缩略图
         intent.putExtra("noFaceDetection", true);// 关闭人脸识别
         ScreenShotPath=f.getPath();
+
         startActivityForResult(intent,RESULT_SCREENSHOT);
     }
     public static Bitmap DrawableToBitmap(Drawable drawable) {
@@ -278,17 +300,17 @@ public class MainActivity extends AppCompatActivity {
     //初始化图片
     public void initImage(){
         for(int i=0;i<1;i++){
-            Img img4=new Img(R.drawable.image4);
+            Img img4=new Img(R.drawable.image4,true);
             Imglist.add(img4);
-            Img img5=new Img(R.drawable.image5);
+            Img img5=new Img(R.drawable.image5,true);
             Imglist.add(img5);
-            Img img6=new Img(R.drawable.image6);
+            Img img6=new Img(R.drawable.image6,true);
             Imglist.add(img6);
-            Img img7=new Img(R.drawable.image7);
+            Img img7=new Img(R.drawable.image7,true);
             Imglist.add(img7);
-            Img img8=new Img(R.drawable.image8);
+            Img img8=new Img(R.drawable.image8,true);
             Imglist.add(img8);
-            Img img9=new Img(R.drawable.image9);
+            Img img9=new Img(R.drawable.image9,true);
             Imglist.add(img9);
         }
     }
