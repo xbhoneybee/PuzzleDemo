@@ -32,6 +32,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -66,8 +68,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        PathFile=new File(getApplicationContext().getFilesDir().getAbsolutePath()+"/allSelectedPicPath.txt");
-        Log.e(TAG, "onCreate: PathFile -- "+ getApplicationContext().getFilesDir().getAbsolutePath()+"/allSelectedPicPath.txt");
+        PathFile=new File(Environment.getExternalStorageDirectory()+"/PuzzleScreenShot");
+        if(!PathFile.exists())
+            PathFile.mkdirs();
+                PathFile=new File(PathFile.getPath()+"/allSelectedPicPath.txt");
         ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
             actionBar.hide();
@@ -93,9 +97,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     @Override
+    protected void onStop(){
+        super.onStop();
+        Imglist.clear();
+    }
+    @Override
     protected void onStart() {
         super.onStart();
-        initImage();
+        try {
+            initImage();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         recyclerView=(RecyclerView)findViewById(R.id.recycler_view);
         StaggeredGridLayoutManager layoutManager=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -224,7 +237,15 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent=new Intent(MainActivity.this,Main2Activity.class);
                         intent.putExtra("Difficulty",this.Difficulty);
                         intent.putExtra("Picturepath",ScreenShotPath);
-                        SetPathFile.writeFileSdcard(PathFile.getPath(),ScreenShotPath);
+                        try {
+                            // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
+                            FileWriter writer = new FileWriter(PathFile, true);
+                            writer.write(ScreenShotPath+"\n");
+                            writer.close();
+                        } catch (IOException e) {
+                        e.printStackTrace();
+                        }
+
                         startActivity(intent);
                 }
                 break;
@@ -298,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
         return bitmap;
     }
     //初始化图片
-    public void initImage(){
+    public void initImage() throws IOException {
         for(int i=0;i<1;i++){
             Img img4=new Img(R.drawable.image4,true);
             Imglist.add(img4);
@@ -312,6 +333,18 @@ public class MainActivity extends AppCompatActivity {
             Imglist.add(img8);
             Img img9=new Img(R.drawable.image9,true);
             Imglist.add(img9);
+        }
+        FileReader fr=new FileReader(PathFile);
+        BufferedReader br=new BufferedReader(fr);
+        String temp=null;
+        String s="";
+        while((temp=br.readLine())!=null){
+            s+=temp+"\n";
+        }
+        String [] ss=s.split("\n");
+        for (int i = 0; i < ss.length; i++) {
+           Img imgg=new Img(ss[i],false);
+            Imglist.add(imgg);
         }
     }
 }

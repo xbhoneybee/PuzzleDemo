@@ -2,6 +2,7 @@ package com.example.bjtu.puzzle;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
@@ -13,7 +14,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -74,6 +80,37 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
                         if(img.isIsself()){
                             Toast.makeText(view.getContext(),"你不能删除默认图片",Toast.LENGTH_LONG).show();
                         }else {
+                            String delPath=img.getPath();
+                            /**
+                             * 操作，全部读出后写入
+                             */
+                            FileReader fr= null;
+                            String s="";
+                            try {
+                                fr = new FileReader(MainActivity.PathFile);
+                                BufferedReader br=new BufferedReader(fr);
+                                String temp=null;
+
+                                while((temp=br.readLine())!=null){
+                                    s+=temp+"\n";
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            String [] ss=s.split("\n");
+                            FileWriter writer = null;
+                            try {
+                                writer = new FileWriter(MainActivity.PathFile);
+                                for (int id = 0; id < ss.length; id++) {
+                                    if(ss[id].equals(delPath)==false)
+                                        writer.write(ss[id]+"\n");
+                                }
+                                writer.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            File todelfile=new File(delPath);
+                            todelfile.delete();
                             MainActivity.Imglist.remove(img);
                             notifyItemRemoved(posdtion);
                             notifyItemRangeChanged(posdtion, MainActivity.Imglist.size() - posdtion);
@@ -89,7 +126,11 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(ImgAdapter.ViewHolder holder, int position) {
         Img img=Imglist.get(position);
+        if(img.isIsself())
         holder.ImgImage.setImageResource(img.getImg());
+        else {
+            holder.ImgImage.setImageBitmap(BitmapFactory.decodeFile(img.getPath()));
+        }
     }
     @Override
     public int getItemCount() {
