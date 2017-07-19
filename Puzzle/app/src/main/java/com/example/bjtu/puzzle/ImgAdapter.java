@@ -46,10 +46,6 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
             public void onClick(View view) {
                 int posdtion=holder.getAdapterPosition();
                 Img img=Imglist.get(posdtion);
-//                if(posdtion==0) {
-//                }
-                //处理
-                Toast.makeText(view.getContext(),"you clicked image"+String.valueOf(img.getImg()), Toast.LENGTH_SHORT).show();
                 MainActivity.setChosenImage(img.getImg());
                 //进入第二页面
                 Intent intent=new Intent(view.getContext(),Main2Activity.class);
@@ -60,14 +56,9 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
         holder.ImgImage.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View view) {
-//                int posdtion=holder.getAdapterPosition();
-//                Img img=Imglist.get(posdtion);
-//                MainActivity.Imglist.remove(img);
-//                notifyItemRemoved(posdtion);
                 AlertDialog.Builder dialog=new AlertDialog.Builder(view.getContext());
                 dialog.setTitle("确定删除此图？");
                 dialog.setCancelable(false);
-
                 dialog.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

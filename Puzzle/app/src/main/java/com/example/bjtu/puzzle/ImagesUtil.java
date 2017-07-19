@@ -2,7 +2,11 @@ package com.example.bjtu.puzzle;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +37,9 @@ public class ImagesUtil {
                 bitmap=Bitmap.createBitmap(picSelected,(j-1)*itemWidth,(i-1)*itemHeight,itemWidth,itemHeight);
                 bitmapItems.add(bitmap);
                 if(i==n&&j==n){
-                    bitmap=Bitmap.createBitmap(resizeBitmap(itemWidth,itemHeight,picSelected));
-
+                    bitmap=DrawableIdToBitmap(context,R.drawable.icon1);
+                    bitmap=resizeBitmap(itemWidth,itemHeight,bitmap);
                     ruler.last=new Box(n*n,n*n,bitmap);
-                    /**
-                     * 这个还需要将picSeleced缩小到n倍,当做起始操作点
-                     */
                 }
                 box=new Box((i-1)*n+j,(i-1)*n+j,bitmap);
                 ruler.boxes.add(box);
@@ -52,5 +53,17 @@ public class ImagesUtil {
           * 设置矩阵，对Bitmap 进行放缩
           */
         return newBitmap;
+    }
+    public  Bitmap DrawableIdToBitmap(Context contxet , int id) {
+        Drawable drawable= ContextCompat.getDrawable(contxet,id);
+        Bitmap bitmap = Bitmap.createBitmap(
+                drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(),
+                drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                        : Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 }
