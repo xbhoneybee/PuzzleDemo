@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.Message;
 
@@ -41,6 +45,10 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
     private View LinearView;
     private TextView suctext1;
 
+    //重力感应修改开始标志
+    private SensorManager mSensorManager = null;
+    private Sensor mSensor = null;
+    private float x, y, z;
 
     private static final String TAG = "Puzzle";
     private Bitmap picPuzzle;
@@ -83,7 +91,26 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
         sucImg=(ImageView)findViewById(R.id.puzzle_img);
         suctext1=(TextView)findViewById(R.id.puzzle_linear_text1);
 
+        //重力传感器应用
+        mSensorManager = (SensorManager)this.getSystemService(SENSOR_SERVICE);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
     }
+
+    //重力传感器监听
+    SensorEventListener lsn = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            x = sensorEvent.values[0];
+            y = sensorEvent.values[1];
+            z = sensorEvent.values[2];
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+
+        }
+    };
 
     @Override
     protected void onStart() {
@@ -107,7 +134,6 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
 
         initView();
     }
-
 
 
     private void initView(){
@@ -160,7 +186,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
                          */
                         timer.cancel();
                         timerTask.cancel();
-                        suctext1.setText("您用了：  "+String.valueOf(steps)+"步   "+String.valueOf(seconds)+" 秒   完成\n\n"+"我们对您的评价是：\n\n"+(seconds<30?"666666666666666666666666":"您弱的一P,请接受开发人员的嘲讽"));
+                        suctext1.setText("您用了：  "+String.valueOf(steps)+"步   "+String.valueOf(seconds)+" 秒   完成\n\n"+"我们对您的评价是：\n\n"+(seconds<60?"666666666666666666666666":"您弱的一P,请接受开发人员的嘲讽"));
                         LinearView.setVisibility(View.VISIBLE);
 //                        sucImg.setVisibility(View.VISIBLE);
                         Runnable runnable = new Runnable() {
