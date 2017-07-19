@@ -30,9 +30,6 @@ import android.widget.Toast;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-import static android.view.View.GONE;
-
 public class Puzzle extends AppCompatActivity implements View.OnClickListener {
 
     private int seconds=-1,steps=0;
@@ -62,7 +59,6 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
                     // 更新计时器
@@ -129,42 +125,21 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
             picPuzzle=BitmapFactory.decodeFile(path);
         }
 
-
         ruler=new GameRule();
-
         initView();
     }
 
 
     private void initView(){
-        Log.e(TAG,"原图heigt   "+picPuzzle.getHeight());
-        Log.e(TAG,"原图width   "+picPuzzle.getWidth());
-        DisplayMetrics myDisplayMetrics=ScreenUtil.getScreenSize(this);
+        DisplayMetrics myDisplayMetrics=ScreenUtil.getScreenSize(this);//获取屏幕参数
         Length= myDisplayMetrics.widthPixels-myDisplayMetrics.densityDpi/160*(50+3*(n-1));
         picPuzzle=ImagesUtil.resizeBitmap(Length,Length,picPuzzle);
-
-        Log.e(TAG,"length   "+Length);
-        Log.e(TAG,"改后图heigt   "+picPuzzle.getHeight());
-        Log.e(TAG,"改后图width   "+picPuzzle.getWidth());
-
-        Log.e(TAG,"Screen xdpi   "+myDisplayMetrics.xdpi);
-        Log.e(TAG,"Screen  ydpi  "+myDisplayMetrics.ydpi);
-        Log.e(TAG,"Screen width   "+myDisplayMetrics.widthPixels);
-        Log.e(TAG,"Screen height   "+(int)myDisplayMetrics.heightPixels);
-        Log.e(TAG,"Pic width   "+picPuzzle.getWidth());
         imagesUtil=new ImagesUtil(ruler);
         imagesUtil.createInitBitmaps(n,picPuzzle,this);
-        Log.e(TAG,"boxes   1 w"+ruler.boxes.get(0).getBitmap().getWidth());
-        Log.e(TAG,"boxes   1 h"+ruler.boxes.get(0).getBitmap().getHeight());
-
         gridView=(GridView)findViewById(R.id.gridView);
         gridView.setVisibility(View.VISIBLE);
         gridView.setNumColumns(n);
         gridView.setColumnWidth((int)Length/n);
-
-//        gridView.setHorizontalSpacing(3);
-//        gridView.setVerticalSpacing(3);
-
         ruler.BoxGenerator();
         final GridAdapter myadapter=new GridAdapter(this,ruler.boxes);
         gridView.setAdapter(myadapter);
@@ -188,7 +163,6 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
                         timerTask.cancel();
                         suctext1.setText("您用了：  "+String.valueOf(steps)+"步   "+String.valueOf(seconds)+" 秒   完成\n\n"+"我们对您的评价是：\n\n"+(seconds<60?"666666666666666666666666":"您弱的一P,请接受开发人员的嘲讽"));
                         LinearView.setVisibility(View.VISIBLE);
-//                        sucImg.setVisibility(View.VISIBLE);
                         Runnable runnable = new Runnable() {
                             @Override
                             public void run() {

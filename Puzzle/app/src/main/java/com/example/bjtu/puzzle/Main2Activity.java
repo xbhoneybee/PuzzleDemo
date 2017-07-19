@@ -17,12 +17,12 @@ import java.io.FileNotFoundException;
 
 import javax.security.auth.login.LoginException;
 
+import static android.R.attr.bitmap;
 import static android.R.attr.data;
 
 public class Main2Activity extends AppCompatActivity implements View.OnClickListener {
     private static int Difficulty;
     private int imgid;
-    private View view;
     private ImageView img;
     private Button but1;
     private Button but2;
@@ -42,14 +42,12 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         Intent intent=getIntent();
         imgid=intent.getIntExtra("Picture",R.drawable.image4);
         path=intent.getStringExtra("Picturepath");
-        Log.e(TAG, "onCreate: Path "+path );
         img = (ImageView) findViewById(R.id.dif_imageView);
         if(path==null) {
             img.setImageResource(imgid);
         }else{
-
-            img.setImageBitmap(BitmapFactory.decodeFile(path));
-
+            Bitmap tmpbitmap=BitmapFactory.decodeFile(path);
+            img.setImageBitmap(tmpbitmap);
         }
         but1=(Button)findViewById(R.id.dif_button_1);
         but2=(Button)findViewById(R.id.dif_button_2);
@@ -83,12 +81,11 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-        public void gotoPuzzle() {
-        Intent intent=new Intent(Main2Activity.this,Puzzle.class);
-        intent.putExtra("Difficulty",Difficulty);
-        intent.putExtra("Picture",imgid);
+        private void gotoPuzzle() {
+            Intent intent=new Intent(Main2Activity.this,Puzzle.class);
+            intent.putExtra("Difficulty",Difficulty);
+            intent.putExtra("Picture",imgid);
             intent.putExtra("Picturepath",path);
-        startActivity(intent);
-
+            startActivity(intent);
     }
 }

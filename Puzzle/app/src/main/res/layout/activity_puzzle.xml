@@ -118,6 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="放  弃"
+            android:background="#00000000"
             android:textSize="20sp"
             android:layout_marginRight="10dp"/>
         <Button
@@ -125,6 +126,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="#00000000"
             android:hint="重  来"
             android:textSize="20sp"
             android:layout_marginLeft="10dp"/>

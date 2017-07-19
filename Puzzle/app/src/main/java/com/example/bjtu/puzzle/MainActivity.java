@@ -19,25 +19,18 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity {
     private Button leftbut;
@@ -46,22 +39,21 @@ public class MainActivity extends AppCompatActivity {
     private static int Difficulty=3;
     private static final int RESULT_CAMERA=100;
     private static final int RESULT_GALLERY=200;
-    public static  String TEMP_IMAGE_PATH;
+    private static final int RESULT_SCREENSHOT=300;
+    private static String ScreenShotPath;
+    public static  String CAMERA_IMAGE_PATH;
+    private static final int output_X=600;
+    private static final int output_Y=600;
     public static  final String IMAGE_TYPE="image/*";
     private static int chosenImage=R.drawable.image4;
     private RecyclerView recyclerView;
-    private File imageFile=null;
-    public static int getChosenImage() {
-        return chosenImage;
-    }
-
+    private File GalleryimageFile=null;
     public static void setChosenImage(int chosenImage) {
         MainActivity.chosenImage = chosenImage;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initImage();
@@ -76,12 +68,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 AlertDialog.Builder dialog=new AlertDialog.Builder(MainActivity.this);
                 dialog.setTitle("关  于");
-                dialog.setMessage("XXX工作室\ncopyright @2017|all right reserved.");
+                dialog.setMessage("十石石石工作室\ncopyright @2017|all right reserved.");
                 dialog.setCancelable(true);
                 dialog.show();
             }
         });
-
         rightbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,48 +81,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     @Override
     protected void onStart() {
         super.onStart();
         recyclerView=(RecyclerView)findViewById(R.id.recycler_view);
-//        LinearLayoutManager layoutManager=new LinearLayoutManager(this);
-//        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         StaggeredGridLayoutManager layoutManager=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         ImgAdapter adapter=new ImgAdapter(Imglist);
         recyclerView.setAdapter(adapter);
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.main_menu,menu);
-//        return true;
-//    }
-
-//    public boolean onOptionsItemSelected(MenuItem item){
-//        switch (item.getItemId()){
-//            case R.id.id_help:
-//                AlertDialog.Builder dialog=new AlertDialog.Builder(MainActivity.this);
-//                dialog.setTitle("关  于");
-//                dialog.setMessage("XXX工作室\ncopyright @2017|all right reserved.");
-//                dialog.setCancelable(true);
-//                dialog.show();
-//                break;
-//            default:
-//                break;
-//        }
-//        return true;
-//    }
-    //添加几个方法
-private static final String TAG = "MainActivity";
     private void showDialogItem(){
         /*
          *选择使用相机还是使用本地图库
          * 使用AlertDialog比较合适
          */
-        TEMP_IMAGE_PATH= Environment.getExternalStorageDirectory().getPath()+"/DCIM/Camera/";
-        Log.e(TAG, "showDialogItem: "+TEMP_IMAGE_PATH );
+        CAMERA_IMAGE_PATH= Environment.getExternalStorageDirectory().getPath()+"/DCIM/Camera/";
         AlertDialog.Builder dialog= new AlertDialog.Builder(MainActivity.this);
         dialog.setTitle("请选择");
         dialog.setItems(new String[]{"使用相机", "本地图库"}, new DialogInterface.OnClickListener() {
@@ -141,16 +105,14 @@ private static final String TAG = "MainActivity";
                     case 0:
                         //camera
                         long  time = Calendar.getInstance().getTimeInMillis();
-                        Intent intent0=new Intent(("android.media.action.IMAGE_CAPTURE"));
-
-                        File out =new File(TEMP_IMAGE_PATH);
+                        File out =new File(CAMERA_IMAGE_PATH);
                         if(!out.exists()){
                             out.mkdirs();
                         }
-                        out=new File (TEMP_IMAGE_PATH,time+".jpg");
-                        TEMP_IMAGE_PATH+=time+".jpg";
+                        out=new File (CAMERA_IMAGE_PATH,time+".jpg");
+                        CAMERA_IMAGE_PATH+=time+".jpg";
+                        Intent intent0=new Intent(("android.media.action.IMAGE_CAPTURE"));
                         intent0.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(out));
-                        Log.e(TAG, "onClick: PHOTO name "+ TEMP_IMAGE_PATH);
                         startActivityForResult(intent0,RESULT_CAMERA);
                         break;
                     case 1:
@@ -170,6 +132,17 @@ private static final String TAG = "MainActivity";
         });
         dialog.create().show();
     }
+    private String getImagePath(Uri uri,String selection){
+        String path=null;
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if(cursor!=null){
+            if(cursor.moveToFirst()){
+                path=cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
     private void openAlbum(){
         Intent intent1 =new Intent("android.intent.action.GET_CONTENT");
         intent1.setType(IMAGE_TYPE);
@@ -185,17 +158,19 @@ private static final String TAG = "MainActivity";
             }
         }
     }
+
+    private static final String TAG = "MainActivity";
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("filePath", TEMP_IMAGE_PATH);
-        Log.d(TAG, "onSaveInstanceState");
+        outState.putString("filePath",CAMERA_IMAGE_PATH);
+        Log.d(TAG, "onSaveInstanceState:");
     }
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (TextUtils.isEmpty(TEMP_IMAGE_PATH)) {
-            TEMP_IMAGE_PATH= savedInstanceState.getString("filePath");
+        if (TextUtils.isEmpty(CAMERA_IMAGE_PATH)) {
+            CAMERA_IMAGE_PATH= savedInstanceState.getString("filePath");
         }
         Log.d(TAG, "onRestoreInstanceState");
     }
@@ -204,15 +179,8 @@ private static final String TAG = "MainActivity";
         switch(requestCode){
             case RESULT_CAMERA:
                 if(resultCode==RESULT_OK) {
-                    imageFile = new File(TEMP_IMAGE_PATH);
-
-                    Intent intent=new Intent(MainActivity.this,Main2Activity.class);
-                    intent.putExtra("Difficulty",this.Difficulty);
-
-                    intent.putExtra("Picturepath",TEMP_IMAGE_PATH);
-
-                    Log.e(TAG, "onActivityResult:Photo  name  "+ TEMP_IMAGE_PATH);
-                    startActivity(intent);
+                    GalleryimageFile = new File(CAMERA_IMAGE_PATH);
+                    cropRawPhoto(Uri.fromFile(GalleryimageFile));
                 }
                 break;
             case RESULT_GALLERY:
@@ -236,53 +204,51 @@ private static final String TAG = "MainActivity";
                         //如果是file类型的Uri，直接获取路径
                         imagePath=uri.getPath();
                     }
-                    Intent intent=new Intent(MainActivity.this,Main2Activity.class);
-                    intent.putExtra("Difficulty",this.Difficulty);
-                    intent.putExtra("Picturepath",imagePath);
-                    startActivity(intent);
+                    cropRawPhoto((Uri.fromFile(new File(imagePath))));
+                }
+                break;
+            case RESULT_SCREENSHOT:
+                if(resultCode==RESULT_OK){
+                        Intent intent=new Intent(MainActivity.this,Main2Activity.class);
+                        intent.putExtra("Difficulty",this.Difficulty);
+                        intent.putExtra("Picturepath",ScreenShotPath);
+                        startActivity(intent);
                 }
                 break;
             default:
                 break;
         }
     }
-
     /**
-     * Bitmap 和Drawable 的转化
+     * 拍照或选择照片后截图
+     * 传入图片Uri
      */
-    private Bitmap PathToBitmap(String path)  {
-        Uri imguri=Uri.fromFile(new File(path));
-        Bitmap bitmap= null;
-        try {
-            bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imguri));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
-    private String getImagePath(Uri uri,String selection){
-        String path=null;
-        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
-        if(cursor!=null){
-            if(cursor.moveToFirst()){
-                path=cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-            }
-            cursor.close();
-        }
-        return path;
-    }
-    private   Bitmap DrawableIdToBitmap(int id) {
-        Drawable drawable= ContextCompat.getDrawable(this,id);
-        Bitmap bitmap = Bitmap.createBitmap(
-                drawable.getIntrinsicWidth(),
-                drawable.getIntrinsicHeight(),
-                drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-                        : Bitmap.Config.RGB_565);
-        Canvas canvas = new Canvas(bitmap);
-        //canvas.setBitmap(bitmap);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        drawable.draw(canvas);
-        return bitmap;
+    public void cropRawPhoto(Uri uri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        //把裁剪的数据填入里面
+        // 设置裁剪
+        intent.putExtra("crop", "true");
+        // aspectX , aspectY :宽高的比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        // outputX , outputY : 裁剪图片宽高
+        intent.putExtra("outputX", output_X);
+        intent.putExtra("outputY", output_Y);
+        File nf = new File(Environment.getExternalStorageDirectory()+"/PuzzleScreenShot");
+        if(!nf.exists())
+        {nf.mkdirs();}
+        //在根目录下面的文件夹下 创建 文件
+        String npname=Calendar.getInstance().getTimeInMillis()+".jpg";
+        File f = new File(Environment.getExternalStorageDirectory()+"/PuzzleScreenShot/", npname);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));//// 输出文件
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());// 输出格式
+        intent.putExtra("scale", true);// 缩放
+        intent.putExtra("scaleUpIfNeeded", true);// 如果小于要求输出大小，就放大
+        intent.putExtra("return-data", false);// 不返回缩略图
+        intent.putExtra("noFaceDetection", true);// 关闭人脸识别
+        ScreenShotPath=f.getPath();
+        startActivityForResult(intent,RESULT_SCREENSHOT);
     }
     public static Bitmap DrawableToBitmap(Drawable drawable) {
         Bitmap bitmap = Bitmap.createBitmap(
@@ -296,13 +262,19 @@ private static final String TAG = "MainActivity";
         drawable.draw(canvas);
         return bitmap;
     }
-    //加图
-//    public void add(ImageView img){
-//        Imglist.add(0,img);
-//
-//    }
-
-
+    /**
+     * Bitmap 和Drawable 的转化
+     */
+    private Bitmap PathToBitmap(String path)  {
+        Uri imguri=Uri.fromFile(new File(path));
+        Bitmap bitmap= null;
+        try {
+            bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imguri));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
     //初始化图片
     public void initImage(){
         for(int i=0;i<1;i++){

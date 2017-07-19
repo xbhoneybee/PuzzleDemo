@@ -31,7 +31,7 @@ public class Box {
         this.bitmap=bitmap;
     }
     public Box(){
-        ;
+
     }
     public Box(int posId,int bitmapId,Bitmap bitmap){
         this.posId=posId;

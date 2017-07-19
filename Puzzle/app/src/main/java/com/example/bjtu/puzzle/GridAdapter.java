@@ -37,15 +37,14 @@ public class GridAdapter extends BaseAdapter {
     }
 
     @Override
+    //设置gridView 的显式格式
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView ic_pic_item=null;
         if(convertView==null){
             ic_pic_item=new ImageView(context);
             ic_pic_item.setLayoutParams(new GridView.LayoutParams(
                     picList.get(0).getBitmap().getWidth(),picList.get(0).getBitmap().getHeight()));
-            //
             ic_pic_item.setScaleType(ImageView.ScaleType.FIT_XY);
-            //
         }else ic_pic_item=(ImageView)convertView;
         ic_pic_item.setImageBitmap(picList.get(position).getBitmap());
         return ic_pic_item;
