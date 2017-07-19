@@ -30,7 +30,7 @@ import android.widget.Toast;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Puzzle extends AppCompatActivity implements View.OnClickListener {
+public class Puzzle extends AppCompatActivity implements View.OnClickListener,SensorEventListener  {
 
     private int seconds=-1,steps=0;
     private TextView textsec,textsteps;
@@ -46,6 +46,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
     private SensorManager mSensorManager = null;
     private Sensor mSensor = null;
     private float x, y, z;
+    private long time;
 
     private static final String TAG = "Puzzle";
     private Bitmap picPuzzle;
@@ -54,7 +55,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
     private  GameRule ruler;
     private GridView gridView;
     private ImagesUtil imagesUtil;
-
+    private  GridAdapter myadapter;
     //只和计时器有关
     private Handler handler = new Handler() {
         @Override
@@ -86,46 +87,90 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
         LinearView=(View)findViewById(R.id.puzzle_linear);
         sucImg=(ImageView)findViewById(R.id.puzzle_img);
         suctext1=(TextView)findViewById(R.id.puzzle_linear_text1);
-
         //重力传感器应用
-        mSensorManager = (SensorManager)this.getSystemService(SENSOR_SERVICE);
+        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
-    }
-
-    //重力传感器监听
-    SensorEventListener lsn = new SensorEventListener() {
-        @Override
-        public void onSensorChanged(SensorEvent sensorEvent) {
-            x = sensorEvent.values[0];
-            y = sensorEvent.values[1];
-            z = sensorEvent.values[2];
+        if(null==mSensorManager){
+            Log.e(TAG, "onStart: device no support" );
         }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int i) {
-
-        }
-    };
-
-    @Override
-    protected void onStart() {
-        super.onStart();
+        mSensorManager.registerListener( this,mSensor,SensorManager.SENSOR_DELAY_NORMAL);
+        Log.e(TAG, "onCreate: " );
         Intent intent=getIntent();
         int picture =R.drawable.image4;
         picture=intent.getIntExtra("Picture",picture);
-
-        sucImg.setImageResource(picture);
         n=intent.getIntExtra("Difficulty",2);
-            String path=intent.getStringExtra("Picturepath");
+        sucImg.setImageResource(picture);
+        String path=intent.getStringExtra("Picturepath");
         if(path==null) {
             Drawable tmpdrawable = ContextCompat.getDrawable(this, picture);
             picPuzzle = MainActivity.DrawableToBitmap(tmpdrawable);
         }else{
             picPuzzle=BitmapFactory.decodeFile(path);
         }
+    }
+
+    //重力传感器监听
+    @Override
+    public void onSensorChanged(SensorEvent sensor) {
+        float nx = sensor.values[0];
+        float ny = sensor.values[1];
+        float nz = sensor.values[2];
+
+        //计算出 X Y Z的数值下面可以根据这个数值来计算摇晃的速度了
+        //速度 = 路程/时间
+        //X轴的速度
+        long newTime=System.currentTimeMillis();
+        float speedX = (nx - x) / (newTime - time);
+        //y轴的速度
+        float speedY = (ny - y) / (newTime - time);
+        //z轴的速度
+        float speedZ = (nz - z) / (newTime - time);
+        //这样简单的速度就可以计算出来，如果你想计算加速度也可以，在运动学里，加速度a与速度，
+        //位移都有关系：Vt=V0+at，S=V0*t+1/2at^2， S=（Vt^2-V0^2）/(2a),根据这些信息也可以求解a
+        x = nx;
+        y = ny;
+        z = nz;
+        if(Math.abs(speedX)>1E-2||Math.abs(speedY)>1E-2) {
+            Log.e(TAG, "onSensorChanged: Time  " + newTime);
+            Log.e(TAG, "onSensorChanged: X " + x);
+            Log.e(TAG, "onSensorChanged: SeeedX " + speedX);
+            Log.e(TAG, "onSensorChanged: Y  " + y);
+            Log.e(TAG, "onSensorChanged: Seeedy " + speedY);
+            Log.e(TAG, "onSensorChanged: Z " + z);
+            Log.e(TAG, "onSensorChanged: SeeedZ " + speedZ);
+        }
+        time = System.currentTimeMillis();
+        int nowpos=ruler.last.getPosId()-1;
+        if(x>4&&speedX>1e-2&&z>8){//点击左边
+            int from=(nowpos-1+n*n)%n*n;
+            SimulationClick(from);
+            Log.e(TAG, "onSensorChanged: 左边" );
+        }else if(x<-4&&speedX<-(1e-2)&&z>8){//点击右边
+            int from=(nowpos+1)%n*n;
+            SimulationClick(from);
+            Log.e(TAG, "onSensorChanged: 右边" );
+        }else if(y>4&&speedY>1e-2&&z>8){//点击下边
+            int from=(nowpos-n+n*n)%n*n;
+            SimulationClick(from);
+            Log.e(TAG, "onSensorChanged: 下边" );
+        }else if(y<-4&&speedY<-(1e-2)&&z>8){//点击上边
+            int from=(nowpos-n)%n*n;
+            SimulationClick(from);
+            Log.e(TAG, "onSensorChanged: 上边" );
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e(TAG, "onStart: " );
 
         ruler=new GameRule();
+        Log.e(TAG, "onStart: Before initview" );
         initView();
     }
 
@@ -141,7 +186,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
         gridView.setNumColumns(n);
         gridView.setColumnWidth((int)Length/n);
         ruler.BoxGenerator();
-        final GridAdapter myadapter=new GridAdapter(this,ruler.boxes);
+        myadapter=new GridAdapter(this,ruler.boxes);
         gridView.setAdapter(myadapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -205,6 +250,32 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener {
                 timerTask.cancel();
                 onStart();
                 break;
+        }
+    }
+    private  void SimulationClick(int frompos) {
+        Box from = ruler.boxes.get(frompos);
+        if (ruler.isChange(from, ruler.last)) {
+            gridView.setBackgroundColor((int) ((steps % 2) * 0xffFCFCFC));
+            steps++;
+            textsteps.setText(String.valueOf(steps));
+            //刷新界面，并判断完成否
+            myadapter.notifyDataSetChanged();//提示数据变化，刷新
+            if (ruler.isCompleted()) {
+                        /*
+                         *当拼图实现后
+                         */
+                timer.cancel();
+                timerTask.cancel();
+                suctext1.setText("您用了：  " + String.valueOf(steps) + "步   " + String.valueOf(seconds) + " 秒   完成\n\n" + "我们对您的评价是：\n\n" + (seconds < 60 ? "666666666666666666666666" : "您弱的一P,请接受开发人员的嘲讽"));
+                LinearView.setVisibility(View.VISIBLE);
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                };
+                handler.postDelayed(runnable, 2000);
+            }
         }
     }
 }
