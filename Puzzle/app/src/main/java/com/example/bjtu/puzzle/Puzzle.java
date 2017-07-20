@@ -41,6 +41,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
     private ImageView sucImg;
     private View LinearView;
     private TextView suctext1;
+    private int accu=3;
 
     //重力感应修改开始标志
     private SensorManager mSensorManager = null;
@@ -93,7 +94,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
         if(null==mSensorManager){
             Log.e(TAG, "onStart: device no support" );
         }
-        mSensorManager.registerListener( this,mSensor,SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener( this,mSensor,accu*(10000)*SensorManager.SENSOR_DELAY_NORMAL);
         Log.e(TAG, "onCreate: " );
         Intent intent=getIntent();
         int picture =R.drawable.image4;
@@ -130,34 +131,58 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
         x = nx;
         y = ny;
         z = nz;
-        if(Math.abs(speedX)>1E-2||Math.abs(speedY)>1E-2) {
-            Log.e(TAG, "onSensorChanged: Time  " + newTime);
-            Log.e(TAG, "onSensorChanged: X " + x);
-            Log.e(TAG, "onSensorChanged: SeeedX " + speedX);
-            Log.e(TAG, "onSensorChanged: Y  " + y);
-            Log.e(TAG, "onSensorChanged: Seeedy " + speedY);
-            Log.e(TAG, "onSensorChanged: Z " + z);
-            Log.e(TAG, "onSensorChanged: SeeedZ " + speedZ);
-        }
-        time = System.currentTimeMillis();
-        int nowpos=ruler.last.getPosId()-1;
-        if(x>4&&speedX>1e-2&&z>8){//点击左边
-            int from=(nowpos-1+n*n)%n*n;
-            SimulationClick(from);
-            Log.e(TAG, "onSensorChanged: 左边" );
-        }else if(x<-4&&speedX<-(1e-2)&&z>8){//点击右边
-            int from=(nowpos+1)%n*n;
-            SimulationClick(from);
-            Log.e(TAG, "onSensorChanged: 右边" );
-        }else if(y>4&&speedY>1e-2&&z>8){//点击下边
-            int from=(nowpos-n+n*n)%n*n;
-            SimulationClick(from);
-            Log.e(TAG, "onSensorChanged: 下边" );
-        }else if(y<-4&&speedY<-(1e-2)&&z>8){//点击上边
-            int from=(nowpos-n)%n*n;
-            SimulationClick(from);
-            Log.e(TAG, "onSensorChanged: 上边" );
-        }
+            time = System.currentTimeMillis();
+            int nowpos = ruler.last.getPosId()-1;
+            if (x > 7 && speedX > 3e-2 ) {//点击左边
+                int from = (nowpos - 1 + n * n) % (n * n);
+                SimulationClick(from);
+                Log.e(TAG, "onSensorChanged: 左zzzzzzzzzzzzzzzzzzzzzzzz边");
+                Log.e(TAG, "onSensorChanged: Time  " + newTime);
+                Log.e(TAG, "onSensorChanged: X " + x);
+                Log.e(TAG, "onSensorChanged: SeeedX " + speedX);
+                Log.e(TAG, "onSensorChanged: Y  " + y);
+                Log.e(TAG, "onSensorChanged: Seeedy " + speedY);
+                Log.e(TAG, "onSensorChanged: Z " + z);
+                Log.e(TAG, "onSensorChanged: SeeedZ " + speedZ);
+                Log.e(TAG, "onSensorChanged: -------------------------------------------------------" );
+            } else if (x < -6 && speedX < -(4e-2) ) {//点击右边
+                int from = (nowpos + 1) % (n * n);
+                SimulationClick(from);
+                Log.e(TAG, "onSensorChanged: 右yyyyyyyyyyyyyyyyyyyy边");
+                Log.e(TAG, "onSensorChanged: Time  " + newTime);
+                Log.e(TAG, "onSensorChanged: X " + x);
+                Log.e(TAG, "onSensorChanged: SeeedX " + speedX);
+                Log.e(TAG, "onSensorChanged: Y  " + y);
+                Log.e(TAG, "onSensorChanged: Seeedy " + speedY);
+                Log.e(TAG, "onSensorChanged: Z " + z);
+                Log.e(TAG, "onSensorChanged: SeeedZ " + speedZ);
+                Log.e(TAG, "onSensorChanged: -------------------------------------------------------" );
+            } else if (y > 7 && speedY > 2e-2 ) {//点击下边
+                int from = (nowpos + n ) % (n * n);
+                SimulationClick(from);
+                Log.e(TAG, "onSensorChanged: 下xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx边");
+                Log.e(TAG, "onSensorChanged: Time  " + newTime);
+                Log.e(TAG, "onSensorChanged: X " + x);
+                Log.e(TAG, "onSensorChanged: SeeedX " + speedX);
+                Log.e(TAG, "onSensorChanged: Y  " + y);
+                Log.e(TAG, "onSensorChanged: Seeedy " + speedY);
+                Log.e(TAG, "onSensorChanged: Z " + z);
+                Log.e(TAG, "onSensorChanged: SeeedZ " + speedZ);
+                Log.e(TAG, "onSensorChanged: -------------------------------------------------------" );
+            } else if (y < -5 && speedY < -(2e-2)) {//点击上边
+                int from = (nowpos - n+n*n) % (n * n);
+                SimulationClick(from);
+                Log.e(TAG, "onSensorChanged: 上sssssssssssssssssssssssss边");
+                Log.e(TAG, "onSensorChanged: Time  " + newTime);
+                Log.e(TAG, "onSensorChanged: X " + x);
+                Log.e(TAG, "onSensorChanged: SeeedX " + speedX);
+                Log.e(TAG, "onSensorChanged: Y  " + y);
+                Log.e(TAG, "onSensorChanged: Seeedy " + speedY);
+                Log.e(TAG, "onSensorChanged: Z " + z);
+                Log.e(TAG, "onSensorChanged: SeeedZ " + speedZ);
+                Log.e(TAG, "onSensorChanged: -------------------------------------------------------" );
+            }
+
     }
 
     @Override
@@ -192,6 +217,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Box from=ruler.boxes.get(position);
+                Log.e(TAG, "onItemClick: postion "+position );
                 if(ruler.isChange(from,ruler.last))
                 {
                     gridView.setBackgroundColor((int)((steps%2)*0xffFCFCFC));
