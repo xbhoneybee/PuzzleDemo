@@ -142,5 +142,24 @@
             android:layout_marginLeft="10dp"/>
 
     </LinearLayout>
+    <TextView
+        android:id="@+id/puzzle_sensivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="灵敏度："
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:visibility="gone"
+        />
+    <ProgressBar
+        android:layout_marginTop="5dp"
+        android:id="@+id/puzzle_probar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:visibility="gone"
+        />
 </LinearLayout>
 
