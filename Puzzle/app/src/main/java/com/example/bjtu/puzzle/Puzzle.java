@@ -46,6 +46,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
     private int accu=6;
     private ProgressBar probar;
     //重力感应修改开始标志
+    boolean graviton=false;
     private SensorManager mSensorManager = null;
     private Sensor mSensor = null;
     private float x, y, z;
@@ -170,7 +171,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
                 Log.e(TAG, "onSensorChanged: Z " + z);
                 Log.e(TAG, "onSensorChanged: SeeedZ " + speedZ);
                 Log.e(TAG, "onSensorChanged: -------------------------------------------------------" );
-            } else if (y > 7 && speedY > 2e-2 ) {//点击下边
+            } else if (y > 6 && speedY > 2e-2 ) {//点击下边
 //                Toast.makeText(this, "下边", Toast.LENGTH_SHORT).show();
                 int from = (nowpos + n ) % (n * n);
                 SimulationClick(from);
@@ -246,7 +247,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
                          */
                         timer.cancel();
                         timerTask.cancel();
-                        suctext1.setText("您用了：  "+String.valueOf(steps)+"步   "+String.valueOf(seconds)+" 秒   完成\n\n"+"我们对您的评价是：\n\n"+(seconds<60?"666666666666666666666666":"您弱的一P,请接受开发人员的嘲讽"));
+                        suctext1.setText("您用了：  "+String.valueOf(steps)+"步   "+String.valueOf(seconds)+" 秒   完成\n\n"+"我们对您的评价是：\n\n"+(seconds<n*n*20?"666666666666666666666666":"您弱的一P,请接受开发人员的嘲讽"));
                         LinearView.setVisibility(View.VISIBLE);
                         Runnable runnable = new Runnable() {
                             @Override
@@ -291,14 +292,14 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
             Log.e(TAG, "Touch: 2 " + y2);
 
 //            if(y1>1300){
-                if(gravityclickedtimes%2==1&&y1>1400&&x2-x1>300){
+                if( graviton&&y1>1400&&x2-x1>300){
                     if(accu<10){
                         accu++;
                         probar.setProgress(accu);
                         sensivity.setText("灵敏度："+String.valueOf(accu));
                     }
                 }
-                if(gravityclickedtimes%2==1&&y1>1400&&x1-x2>300){
+                if(graviton&&y1>1400&&x1-x2>300){
                     if(accu>0){
                         accu--;
                         sensivity.setText("灵敏度："+String.valueOf(accu));
@@ -307,10 +308,10 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
                 }
 //            }else{//上方
                 int nowpos = ruler.last.getPosId()-1;
-                if((gravityclickedtimes%2==0||(gravityclickedtimes%2==1&&y1<1350)) && x2-x1>100){//右
+                if((!graviton||(graviton&&y1<1400)) && x2-x1>100){//右
                     int from = (nowpos + 1) % (n * n);
                     SimulationClick(from);
-                }else if((gravityclickedtimes%2==0||(gravityclickedtimes%2==1&&y1<1350)) && x1-x2>100){//左
+                }else if((!graviton||(graviton&&y1<1400)) && x1-x2>100){//左
                     int from = (nowpos - 1 + n * n) % (n * n);
                     SimulationClick(from);
                 }else if(y1-y2>100){//上
@@ -332,6 +333,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
         switch (view.getId()){
             case R.id.puzzle_but_1:
                 //giveup
+                Toast.makeText(this, "您放弃了游戏，请接受开发人员的嘲讽。", Toast.LENGTH_SHORT).show();
                 finish();
                 break;
             case R.id.puzzle_but_2:
@@ -345,6 +347,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
             case R.id.puzzle_but_3:
                 if(gravityclickedtimes%2==0){
 //                    mSensorManager.registerListener( this,mSensor,SensorManager.SENSOR_DELAY_NORMAL);
+                    graviton=true;
                     mSensorManager.registerListener( this,mSensor,accu*(5000)*SensorManager.SENSOR_DELAY_NORMAL);
                     accu=6;
                     sensivity.setVisibility(View.VISIBLE);
@@ -353,6 +356,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
                     sensivity.setText("灵敏度："+String.valueOf(accu));
                     Toast.makeText(this, "重力感应已开启，请将手机放平开始游戏", Toast.LENGTH_SHORT).show();
                 }else{
+                    graviton=false;
                     mSensorManager.unregisterListener(this);
                     probar.setVisibility(View.GONE);
                     sensivity.setVisibility(View.GONE);
