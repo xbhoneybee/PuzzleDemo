@@ -34,7 +34,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
 
     private int seconds=-1,steps=0;
     private TextView textsec,textsteps;
-    private Button butgiveup,butrestart;
+    private Button butgiveup,butrestart,butgravity;
     int picture=R.drawable.image4;
     private Timer timer;
     private TimerTask timerTask;//计时器线程
@@ -47,6 +47,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
     private Sensor mSensor = null;
     private float x, y, z;
     private long time;
+    private int gravityclickedtimes=0;
 
     private static final String TAG = "Puzzle";
     private Bitmap picPuzzle;
@@ -81,6 +82,8 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
         butgiveup.setOnClickListener(this);
         butrestart=(Button)findViewById(R.id.puzzle_but_2);
         butrestart.setOnClickListener(this);
+        butgravity=(Button)findViewById(R.id.puzzle_but_3);
+        butgravity.setOnClickListener(this);
         textsteps=(TextView)findViewById(R.id.puzzle_steps);
         textsec=(TextView)findViewById(R.id.puzzle_time);
 
@@ -93,7 +96,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
         if(null==mSensorManager){
             Log.e(TAG, "onStart: device no support" );
         }
-        mSensorManager.registerListener( this,mSensor,SensorManager.SENSOR_DELAY_NORMAL);
+
         Log.e(TAG, "onCreate: " );
         Intent intent=getIntent();
         int picture =R.drawable.image4;
@@ -141,22 +144,26 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
         }
         time = System.currentTimeMillis();
         int nowpos=ruler.last.getPosId()-1;
-        if(x>4&&speedX>1e-2&&z>8){//点击左边
+        if(x>4 && speedX>1e-2 && z>1){//点击左边
             int from=(nowpos-1+n*n)%n*n;
             SimulationClick(from);
             Log.e(TAG, "onSensorChanged: 左边" );
-        }else if(x<-4&&speedX<-(1e-2)&&z>8){//点击右边
+            Toast.makeText(this, "左边", Toast.LENGTH_SHORT).show();
+        }else if(x<-4 && speedX<-(1e-2)&&z>1){//点击右边
             int from=(nowpos+1)%n*n;
             SimulationClick(from);
             Log.e(TAG, "onSensorChanged: 右边" );
-        }else if(y>4&&speedY>1e-2&&z>8){//点击下边
+            Toast.makeText(this, "右边", Toast.LENGTH_SHORT).show();
+        }else if(y>4 && speedY>1e-2&&z>1){//点击下边
             int from=(nowpos-n+n*n)%n*n;
             SimulationClick(from);
             Log.e(TAG, "onSensorChanged: 下边" );
-        }else if(y<-4&&speedY<-(1e-2)&&z>8){//点击上边
+            Toast.makeText(this, "下边", Toast.LENGTH_SHORT).show();
+        }else if(y<-4 && speedY<-(1e-2)&&z>1){//点击上边
             int from=(nowpos-n)%n*n;
             SimulationClick(from);
             Log.e(TAG, "onSensorChanged: 上边" );
+            Toast.makeText(this, "上边", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -249,6 +256,16 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
                 timer.cancel();
                 timerTask.cancel();
                 onStart();
+                break;
+            case R.id.puzzle_but_3:
+                if(gravityclickedtimes%2==0){
+                    mSensorManager.registerListener( this,mSensor,SensorManager.SENSOR_DELAY_NORMAL);
+                    Toast.makeText(this, "重力感应已开启，请将手机放平开始游戏", Toast.LENGTH_SHORT).show();
+                }else{
+                    mSensorManager.unregisterListener(this);
+                    Toast.makeText(this, "重力感应已关闭", Toast.LENGTH_SHORT).show();
+                }
+                gravityclickedtimes++;
                 break;
         }
     }

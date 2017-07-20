@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/puzzleback"
+    android:background="@drawable/puzzleback6"
     android:orientation="vertical"
     tools:context="com.example.bjtu.puzzle.Puzzle">
     <LinearLayout
@@ -112,24 +112,35 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         >
+
         <Button
             android:id="@+id/puzzle_but_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="放  弃"
+            android:hint="放    弃"
             android:background="#00000000"
             android:textSize="20sp"
             android:layout_marginRight="10dp"/>
+        <Button
+            android:id="@+id/puzzle_but_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:hint="重力控制"
+            android:textSize="20sp"
+            android:layout_marginRight="0dp"/>
         <Button
             android:id="@+id/puzzle_but_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#00000000"
-            android:hint="重  来"
+            android:hint="重    来"
             android:textSize="20sp"
             android:layout_marginLeft="10dp"/>
+
     </LinearLayout>
 </LinearLayout>
 
