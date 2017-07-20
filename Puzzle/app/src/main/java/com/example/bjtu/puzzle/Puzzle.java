@@ -258,10 +258,10 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
                 }
             }
             int nowpos = ruler.last.getPosId()-1;
-            if((!graviton||(graviton&&y1<screanhight*0.88)) && x2-x1>100){//右
+            if((!graviton||(graviton&&y1<screanhight*0.86)) && x2-x1>100){//右
                 int from = (nowpos + 1) % (n * n);
                 SimulationClick(from);
-            }else if((!graviton||(graviton&&y1<screanhight*0.88)) && x1-x2>100){//左
+            }else if((!graviton||(graviton&&y1<screanhight*0.86)) && x1-x2>100){//左
                 int from = (nowpos - 1 + n * n) % (n * n);
                 SimulationClick(from);
             }else if(y1-y2>100){//上
