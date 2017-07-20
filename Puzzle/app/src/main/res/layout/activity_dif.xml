@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/puzzleback8"
+    android:background="@drawable/photo_by_mink_mingle_on_unsplash"
 >
 
     <ImageView
@@ -14,7 +14,7 @@
 
         android:layout_height="348dp"
         android:layout_gravity="top|center_horizontal"
-        android:src="@drawable/image4" />
+        android:src="@drawable/image0" />
 
 
     <Button

@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -37,7 +36,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class MainActivity extends AppCompatActivity {
     private Button leftbut;
@@ -52,30 +51,28 @@ public class MainActivity extends AppCompatActivity {
     private static final int output_X=600;
     private static final int output_Y=600;
     public static  final String IMAGE_TYPE="image/*";
-    private static int chosenImage=R.drawable.image4;
     private RecyclerView recyclerView;
     private File GalleryimageFile=null;
     public static File PathFile;
-
-    public MainActivity() throws FileNotFoundException {
-    }
+    private static int chosenImage;
 
     public static void setChosenImage(int chosenImage) {
         MainActivity.chosenImage = chosenImage;
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         PathFile=new File(Environment.getExternalStorageDirectory()+"/PuzzleScreenShot");
         if(!PathFile.exists())
             PathFile.mkdirs();
-                PathFile=new File(PathFile.getPath()+"/allSelectedPicPath.txt");
+        PathFile=new File(PathFile.getPath()+"/allSelectedPicPath.txt");
         ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
             actionBar.hide();
         }
+
         leftbut=(Button)findViewById(R.id.head_button_left);
         rightbut=(Button)findViewById(R.id.head_button_right);
         leftbut.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 AlertDialog.Builder dialog=new AlertDialog.Builder(MainActivity.this);
                 dialog.setTitle("关  于");
-                dialog.setMessage("部分图片来自网络，侵权必删。\n\n十石石石工作室\ncopyright @2017|all right reserved.");
+                dialog.setMessage("部分图片来自网络，侵权必删。\n\nxbhoneybee&Dtristone\ncopyright @2017|all right reserved.");
                 dialog.setCancelable(true);
                 dialog.show();
             }
@@ -115,6 +112,16 @@ public class MainActivity extends AppCompatActivity {
         ImgAdapter adapter=new ImgAdapter(Imglist);
         recyclerView.setAdapter(adapter);
     }
+
+    /**
+     * 完成整个相机和相册调用并截图 所需方法：
+     * showDialogItem
+     * getImagePath
+     * openAlbum
+     * onRequestPermissionsResult
+     * onActivityResult
+     * cropRawPhoto
+     */
     private void showDialogItem(){
         /*
          *选择使用相机还是使用本地图库
@@ -123,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         CAMERA_IMAGE_PATH= Environment.getExternalStorageDirectory().getPath()+"/DCIM/Camera/";
         AlertDialog.Builder dialog= new AlertDialog.Builder(MainActivity.this);
         dialog.setTitle("请选择");
-        dialog.setItems(new String[]{"使用相机", "本地图库"}, new DialogInterface.OnClickListener() {
+        dialog.setItems(new String[]{"使用相机 Camera", "本地图库 Gallery"}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
@@ -305,34 +312,15 @@ public class MainActivity extends AppCompatActivity {
         drawable.draw(canvas);
         return bitmap;
     }
-    /**
-     * Bitmap 和Drawable 的转化
-     */
-    private Bitmap PathToBitmap(String path)  {
-        Uri imguri=Uri.fromFile(new File(path));
-        Bitmap bitmap= null;
-        try {
-            bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imguri));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
     //初始化图片
     public void initImage() throws IOException {
         for(int i=0;i<1;i++){
-            Img img4=new Img(R.drawable.image4,true);
-            Imglist.add(img4);
-            Img img5=new Img(R.drawable.image5,true);
-            Imglist.add(img5);
-            Img img6=new Img(R.drawable.image6,true);
-            Imglist.add(img6);
-            Img img7=new Img(R.drawable.image7,true);
-            Imglist.add(img7);
-            Img img8=new Img(R.drawable.image8,true);
-            Imglist.add(img8);
-            Img img9=new Img(R.drawable.image9,true);
-            Imglist.add(img9);
+            Img img0=new Img(R.drawable.image0,true);
+            Imglist.add(img0);
+            Img img1=new Img(R.drawable.image1,true);
+            Imglist.add(img1);
+            Img img2=new Img(R.drawable.image2,true);
+            Imglist.add(img2);
         }
         FileReader fr=new FileReader(PathFile);
         BufferedReader br=new BufferedReader(fr);

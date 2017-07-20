@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/puzzleback6"
+    android:background="@drawable/photo_by_matthew_kane_on_unsplash"
     android:orientation="vertical"
     tools:context="com.example.bjtu.puzzle.Puzzle">
     <LinearLayout

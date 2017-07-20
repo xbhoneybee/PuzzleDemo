@@ -6,6 +6,9 @@ import android.graphics.Bitmap;
  * Created by XBhoneYbee on 2017/7/15.
  */
 
+/**
+ * 小可移动块类
+ */
 public class Box {
     private int posId;
     private int bitmapId;
@@ -21,9 +24,6 @@ public class Box {
         return bitmap;
     }
 
-    public void setPosId(int posId){
-        this.posId=posId;
-    }
     public void setBitmapId(int bitmapId){
         this.bitmapId=bitmapId;
     }

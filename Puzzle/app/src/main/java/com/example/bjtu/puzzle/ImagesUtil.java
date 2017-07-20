@@ -37,7 +37,7 @@ public class ImagesUtil {
                 bitmap=Bitmap.createBitmap(picSelected,(j-1)*itemWidth,(i-1)*itemHeight,itemWidth,itemHeight);
                 bitmapItems.add(bitmap);
                 if(i==n&&j==n){
-                    bitmap=DrawableIdToBitmap(context,R.drawable.icon1);
+                    bitmap=DrawableIdToBitmap(context,R.drawable.icon_nasa_moon);
                     bitmap=resizeBitmap(itemWidth,itemHeight,bitmap);
                     ruler.last=new Box(n*n,n*n,bitmap);
                 }

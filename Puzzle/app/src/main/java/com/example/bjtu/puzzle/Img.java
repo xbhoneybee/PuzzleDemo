@@ -2,6 +2,7 @@ package com.example.bjtu.puzzle;
 
 /**
  * Created by dl188 on 2017/7/16.
+ * RecyclerView 内填充List
  */
 
 public class Img {

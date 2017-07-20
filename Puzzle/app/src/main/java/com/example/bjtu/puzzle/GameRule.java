@@ -1,8 +1,6 @@
 package com.example.bjtu.puzzle;
 
 import android.graphics.Bitmap;
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +13,10 @@ public class GameRule {
     public  List<Box> boxes=new ArrayList<Box>();//小方块list
     public  Box last;//移动标志块
     private int n=Main2Activity.getDifficulty();
-    private static final String TAG = "GameRule";
+
+    /**
+     * 生成开始游戏后的boxes
+     */
     public void BoxGenerator(){
         last=boxes.get(boxes.size()-1);
         double times=Math.random()*100+40;

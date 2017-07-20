@@ -3,11 +3,8 @@ package com.example.bjtu.puzzle;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +13,14 @@ import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by dl188 on 2017/7/16.
+ * RecyclerView Adapter
  */
 
 public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
@@ -50,8 +46,8 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
         holder.ImgImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int posdtion=holder.getAdapterPosition();
-                Img img=Imglist.get(posdtion);
+                int position=holder.getAdapterPosition();
+                Img img=Imglist.get(position);
                 MainActivity.setChosenImage(img.getImg());
                 //进入第二页面
                 Intent intent=new Intent(view.getContext(),Main2Activity.class);
@@ -64,7 +60,7 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
             @Override
             public boolean onLongClick(final View view) {
                 AlertDialog.Builder dialog=new AlertDialog.Builder(view.getContext());
-                dialog.setTitle("确定删除此图？");
+                dialog.setTitle("确定删除此图？"+"\n Delete this picture?" );
                 dialog.setCancelable(false);
                 dialog.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
                     @Override
@@ -78,7 +74,7 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
                         int posdtion=holder.getAdapterPosition();
                         Img img=Imglist.get(posdtion);
                         if(img.isIsself()){
-                            Toast.makeText(view.getContext(),"你不能删除默认图片",Toast.LENGTH_LONG).show();
+                            Toast.makeText(view.getContext(),"你不能删除默认图片\nYou can not delete the default picture",Toast.LENGTH_LONG).show();
                         }else {
                             String delPath=img.getPath();
                             /**

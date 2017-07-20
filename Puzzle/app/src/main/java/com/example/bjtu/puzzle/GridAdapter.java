@@ -13,6 +13,9 @@ import java.util.List;
  * Created by XBhoneYbee on 2017/7/17.
  */
 
+/**
+ * GridView 的Adapter
+ */
 public class GridAdapter extends BaseAdapter {
 
     private List<Box> picList;
