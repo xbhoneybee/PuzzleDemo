@@ -62,6 +62,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
     private GridView gridView;
     private ImagesUtil imagesUtil;
     private  GridAdapter myadapter;
+    private int screanhight;
     //只和计时器有关
     private Handler handler = new Handler() {
         @Override
@@ -218,6 +219,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
     private void initView(){
         DisplayMetrics myDisplayMetrics=ScreenUtil.getScreenSize(this);//获取屏幕参数
         Length= myDisplayMetrics.widthPixels-myDisplayMetrics.densityDpi/160*(50+3*(n-1));
+        screanhight=myDisplayMetrics.heightPixels;
         picPuzzle=ImagesUtil.resizeBitmap(Length,Length,picPuzzle);
         imagesUtil=new ImagesUtil(ruler);
         imagesUtil.createInitBitmaps(n,picPuzzle,this);
@@ -292,14 +294,14 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
             Log.e(TAG, "Touch: 2 " + y2);
 
 //            if(y1>1300){
-                if( graviton&&y1>1400&&x2-x1>300){
+                if( graviton&&y1>screanhight*0.88&&x2-x1>300){
                     if(accu<10){
                         accu++;
                         probar.setProgress(accu);
                         sensivity.setText("灵敏度："+String.valueOf(accu));
                     }
                 }
-                if(graviton&&y1>1400&&x1-x2>300){
+                if(graviton&&y1>screanhight*0.88&&x1-x2>300){
                     if(accu>0){
                         accu--;
                         sensivity.setText("灵敏度："+String.valueOf(accu));
@@ -308,10 +310,10 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
                 }
 //            }else{//上方
                 int nowpos = ruler.last.getPosId()-1;
-                if((!graviton||(graviton&&y1<1400)) && x2-x1>100){//右
+                if((!graviton||(graviton&&y1<screanhight*0.88)) && x2-x1>100){//右
                     int from = (nowpos + 1) % (n * n);
                     SimulationClick(from);
-                }else if((!graviton||(graviton&&y1<1400)) && x1-x2>100){//左
+                }else if((!graviton||(graviton&&y1<screanhight*0.88)) && x1-x2>100){//左
                     int from = (nowpos - 1 + n * n) % (n * n);
                     SimulationClick(from);
                 }else if(y1-y2>100){//上
