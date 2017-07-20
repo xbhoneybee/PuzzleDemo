@@ -243,14 +243,18 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
                 if(accu<10){
                     accu++;
                     probar.setProgress(accu);
-                    sensivity.setText("左右滑动下方空白区域，调节灵敏度:"+String.valueOf(accu));
+                    sensivity.setText("灵敏度:"+String.valueOf(accu));
+                    mSensorManager.unregisterListener(this,mSensor);
+                    mSensorManager.registerListener( this,mSensor,(10-accu)*(5000)*SensorManager.SENSOR_DELAY_NORMAL);
                 }
             }
             if(graviton&&y1>screanhight*0.88&&x1-x2>300){
                 if(accu>0){
                     accu--;
-                    sensivity.setText("左右滑动下方空白区域，调节灵敏度:"+String.valueOf(accu));
+                    sensivity.setText("灵敏度:"+String.valueOf(accu));
                     probar.setProgress(accu);
+                    mSensorManager.unregisterListener(this,mSensor);
+                    mSensorManager.registerListener( this,mSensor,(10-accu)*(5000)*SensorManager.SENSOR_DELAY_NORMAL);
                 }
             }
             int nowpos = ruler.last.getPosId()-1;
@@ -276,7 +280,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
         switch (view.getId()){
             case R.id.puzzle_but_1:
                 //giveup
-                Toast.makeText(this, "您放弃了游戏，请接受开发人员的嘲讽。", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "您放弃了游戏，请接受开发人员的嘲讽...", Toast.LENGTH_SHORT).show();
                 finish();
                 break;
             case R.id.puzzle_but_2:
@@ -295,8 +299,9 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
                     sensivity.setVisibility(View.VISIBLE);
                     probar.setVisibility(View.VISIBLE);
                     probar.setProgress(accu);
-                    sensivity.setText("左右滑动下方空白区域，调节灵敏度:"+String.valueOf(accu));
+                    sensivity.setText("灵敏度:"+String.valueOf(accu));
                     Toast.makeText(this, "重力感应已开启，请将手机放平开始游戏", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "滑动下方控制条控制灵敏度", Toast.LENGTH_SHORT).show();
                 }else{
                     graviton=false;
                     mSensorManager.unregisterListener(this);
