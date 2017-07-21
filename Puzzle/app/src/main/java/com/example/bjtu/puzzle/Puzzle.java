@@ -327,7 +327,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
                          */
                 timer.cancel();
                 timerTask.cancel();
-                suctext1.setText("您用了：  " + String.valueOf(steps) + "步   " + String.valueOf(seconds) + " 秒   完成\n\n" + "我们对您的评价是：\n\n" + (seconds < 60 ? "666666666666666666666666" : "您弱的一P,请接受开发人员的嘲讽"));
+                suctext1.setText("您用了：  " + String.valueOf(steps) + "步   " + String.valueOf(seconds) + " 秒   完成\n\n" + "我们对您的评价是：\n\n" + (seconds < n*n*15 && steps< n*n*5 ? "666666666666666666666666" : "您弱的一P,请接受开发人员的嘲讽"));
                 LinearView.setVisibility(View.VISIBLE);
                 Runnable runnable = new Runnable() {
                     @Override
@@ -335,7 +335,7 @@ public class Puzzle extends AppCompatActivity implements View.OnClickListener,Se
                         finish();
                     }
                 };
-                handler.postDelayed(runnable, 2000);
+                handler.postDelayed(runnable, 3000);
             }
         }
     }

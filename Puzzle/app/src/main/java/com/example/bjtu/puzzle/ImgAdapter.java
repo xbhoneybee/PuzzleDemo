@@ -62,7 +62,7 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.ViewHolder>{
                 AlertDialog.Builder dialog=new AlertDialog.Builder(view.getContext());
                 dialog.setTitle("确定删除此图？"+"\n Delete this picture?" );
                 dialog.setCancelable(false);
-                dialog.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 

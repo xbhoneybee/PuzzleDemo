@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 AlertDialog.Builder dialog=new AlertDialog.Builder(MainActivity.this);
                 dialog.setTitle("关  于");
-                dialog.setMessage("部分图片来自网络，侵权必删。\n\nxbhoneybee&Dtristone\ncopyright @2017|all right reserved.");
+                dialog.setMessage("部分图片来自网络，侵权必删。\n\nxbhoneybee&Dtristone\ncopyright © 2017|all rights reserved.");
                 dialog.setCancelable(true);
                 dialog.show();
             }
